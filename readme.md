@@ -1,4 +1,4 @@
-## BIPN 162 (Neural Data Science) is a project-based course in which students will use computational notebooks to perform exploratory data analyses and to test hypotheses in large neuroscience datasets, including the <a href="https://portal.brain-map.org/">differences between unique neuron types</a>, leveraging text mining of the neuroscience literature, and human neuroimaging analyses.
+# BIPN 162 (Neural Data Science) is a project-based course in which students will use computational notebooks to perform exploratory data analyses and to test hypotheses in large neuroscience datasets, including the <a href="https://portal.brain-map.org/">differences between unique neuron types</a>, leveraging text mining of the neuroscience literature, and human neuroimaging analyses.
 Prerequisites: MATH 11 and BIPN 100.
 
 ## In this course, you'll learn how to
