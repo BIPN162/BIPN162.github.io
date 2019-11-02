@@ -1,4 +1,8 @@
-### BIPN 162 (Neural Data Science) is a project-based course in which students will use computational notebooks to perform exploratory data analyses and to test hypotheses in large neuroscience datasets, including the <a href="https://portal.brain-map.org/">differences between unique neuron types</a>, leveraging text mining of the neuroscience literature, and human neuroimaging analyses.
+## What do the different cell types and circuits in the brain <i>do</i>?
+## How do we link genes, circuits, and behavior?
+## And can we use open source data to answer these questions?
+
+BIPN 162 (Neural Data Science) is a project-based course in which students will use computational notebooks to perform exploratory data analyses and to test hypotheses in large neuroscience datasets, including the <a href="https://portal.brain-map.org/">differences between unique neuron types</a>, <a href="https://lisc-tools.github.io/lisc/index.html">text mining of the neuroscience literature</a>, and <a href="https://neurosynth.org/">human neuroimaging analyses</a>.
 
 ### In this course, you'll learn how to
 * Write and edit Python code, particularly in Jupyter Notebooks
