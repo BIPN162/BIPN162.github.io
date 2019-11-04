@@ -9,12 +9,16 @@ BIPN 162 (Neural Data Science) is a project-based course in which students will 
 * Develop hypotheses specific to big data environments in neuroscience
 * Design a big data experiment and excavate data from open sources
 
-### Don't know how to code?
-That's okay, and <i>expected.</i> This course is designed for new coders.
+## FAQs
 
-### Know how to code?
-That's also okay. There is endless complexity to these datasets, and lots of code to write.
+### I don't know how to code! Can I take this course?
+That's okay, and <i>expected.</i> This course is designed for new coders. That's also okay. There is endless complexity to these datasets, and lots of code to write.
 
-### Prerequisites
-<b>MATH 11</b> (Introductory Probability & Statistics) & <b>BIPN 100</b> (Human Physiology).
-This course will rely on a basic understanding of brain regions and the activity of neurons. We'll also be applying principles of statistics to the data. If you think you have enough background in these topics, <a href="https://biology.ucsd.edu/education/undergrad/course/prereq.html">file a waiver.</a>
+### I'm missing a prequisite, is that okay?
+The prequisites for this course are <b>MATH 11</b> (Introductory Probability & Statistics) & <b>BIPN 100</b> (Human Physiology). We'll rely on a basic understanding of brain regions and the activity of neurons. We'll also be applying principles of statistics to the data. If you think you have enough background in these topics, <a href="https://biology.ucsd.edu/education/undergrad/course/prereq.html">file a waiver.</a>
+
+### How much work will this course be?
+Like all 4-unit courses at UCSD, this course will meet for 4 hours (T/Th, with discussion sections Friday; <a href="https://act.ucsd.edu/scheduleOfClasses/scheduleOfClassesStudent.htm">Schedule of Classes</a>) and will assign work (including reviewing lecture material) amounting to about 8 hours of work outside of class. Each week you will complete a coding problem set that will help you develop the skills you need to work with our datasets. In addition, there will be 2 or 3 bigger projects to complete throughout the course.
+
+### I'm a biology major. Why should I care about coding?
+Programming skills are increasingly useful in biology and neuroscience. The ability to code will enable you to acquire, analyze, and visualize your data. Plus, coding is quite useful beyond biology -- why not learn while looking at brains?
