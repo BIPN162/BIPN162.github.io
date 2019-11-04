@@ -26,5 +26,13 @@ Programming skills are increasingly useful in biology and neuroscience. The abil
 ### Who's teaching this course?
 In Winter 2020, this course is being taught by Dr. Ashley Juavinett. I'm developing the course with Dr. Brad Voytek (Cognitive Science) who will be teaching a COGS version of the course in the future.
 
-![](https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg)
+![](https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg?raw=true)
 Drs. Brad Voytek (left) & Ashley Juavinett (right), in the middle of course development!
+
+
+<figure>
+ <img src="https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg?raw=true" alt="instructors"/>
+ <figcaption>
+ Drs. Brad Voytek (left) & Ashley Juavinett (right), in the middle of course development!
+ </figcaption>
+</figure>
