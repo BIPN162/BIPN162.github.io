@@ -4,7 +4,7 @@
 
 BIPN 162 (Neural Data Science) is a project-based course in which students will use computational notebooks to perform exploratory data analyses and to test hypotheses in large neuroscience datasets, including the <a href="https://portal.brain-map.org/">differences between unique neuron types</a>, <a href="https://lisc-tools.github.io/lisc/index.html">text mining of the neuroscience literature</a>, and <a href="https://neurosynth.org/">human neuroimaging analyses</a>.
 
-## In this course, you'll learn how to
+## In this course, you'll learn how to:
 * Write and edit Python code, particularly in Jupyter Notebooks
 * Develop hypotheses specific to big data environments in neuroscience
 * Design a big data experiment and excavate data from open sources
@@ -22,3 +22,8 @@ Like all 4-unit courses at UCSD, this course will meet for 4 hours (T/Th, with d
 
 ### I'm a biology major. Why should I care about coding?
 Programming skills are increasingly useful in biology and neuroscience. The ability to code will enable you to acquire, analyze, and visualize your data. Plus, coding is quite useful beyond biology -- why not learn while looking at brains?
+
+### Who's teaching this course?
+In Winter 2020, this course is being taught by Dr. Ashley Juavinett. I'm developing the course with Dr. Bradley Voytek (Cognitive Science) who will be teaching a COGS version of the course in the future.
+
+![](https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg?raw=true)
