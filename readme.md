@@ -10,6 +10,8 @@ BIPN 162 (Neural Data Science) is a project-based course in which students will 
 * Develop hypotheses specific to big data environments in neuroscience
 * Design a big data experiment and excavate data from open sources
 
+<hr>
+
 ## FAQs
 
 ### I don't know how to code! Can I take this course?
