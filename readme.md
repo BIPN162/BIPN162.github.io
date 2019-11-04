@@ -4,7 +4,7 @@
 
 BIPN 162 (Neural Data Science) is a project-based course in which students will use computational notebooks to perform exploratory data analyses and to test hypotheses in large neuroscience datasets, including the <a href="https://portal.brain-map.org/">differences between unique neuron types</a>, <a href="https://lisc-tools.github.io/lisc/index.html">text mining of the neuroscience literature</a>, and <a href="https://neurosynth.org/">human neuroimaging analyses</a>.
 
-### In this course, you'll learn how to
+## In this course, you'll learn how to
 * Write and edit Python code, particularly in Jupyter Notebooks
 * Develop hypotheses specific to big data environments in neuroscience
 * Design a big data experiment and excavate data from open sources
@@ -12,7 +12,7 @@ BIPN 162 (Neural Data Science) is a project-based course in which students will 
 ## FAQs
 
 ### I don't know how to code! Can I take this course?
-That's okay, and <i>expected.</i> This course is designed for new coders. That's also okay. There is endless complexity to these datasets, and lots of code to write.
+That's okay, and <i>expected.</i> This course is designed for new coders. If you already know how to code, that's also okay. There is endless complexity to these datasets, and lots of code to write.
 
 ### I'm missing a prequisite, is that okay?
 The prequisites for this course are <b>MATH 11</b> (Introductory Probability & Statistics) & <b>BIPN 100</b> (Human Physiology). We'll rely on a basic understanding of brain regions and the activity of neurons. We'll also be applying principles of statistics to the data. If you think you have enough background in these topics, <a href="https://biology.ucsd.edu/education/undergrad/course/prereq.html">file a waiver.</a>
