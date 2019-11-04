@@ -24,6 +24,11 @@ Like all 4-unit courses at UCSD, this course will meet for 4 hours (T/Th, with d
 Programming skills are increasingly useful in biology and neuroscience. The ability to code will enable you to acquire, analyze, and visualize your data. Plus, coding is quite useful beyond biology -- why not learn while looking at brains?
 
 ### Who's teaching this course?
-In Winter 2020, this course is being taught by Dr. Ashley Juavinett. I'm developing the course with Dr. Bradley Voytek (Cognitive Science) who will be teaching a COGS version of the course in the future.
+In Winter 2020, this course is being taught by Dr. Ashley Juavinett. I'm developing the course with Dr. Brad Voytek (Cognitive Science) who will be teaching a COGS version of the course in the future.
 
-![](https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg?raw=true)
+<figure>
+ <img src="https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg" alt="instructors" />
+ <figcaption>
+ Drs. Brad Voytek (left) & Ashley Juavinett (right), in the middle of course development!</a>
+ </figcaption>
+</figure>
