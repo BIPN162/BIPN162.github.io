@@ -29,7 +29,7 @@ Like all 4-unit courses at UCSD, this course will meet for 4 hours (T/Th, with d
 Programming and data science skills are increasingly useful in biology and <a href="https://medium.com/the-spike/a-neural-data-science-how-and-why-d7e3969086f2">neuroscience in particular</a>. The ability to code will enable you to acquire, analyze, and visualize your data. Plus, coding is quite useful beyond biology -- why not learn while looking at brains?
 
 ### Is this course open to graduate students?
-Yes! I'll just ask that you complete a bonus small project for graduate credit.
+Yes! The code is BGGN 240. I'll ask that you complete a bonus small project for graduate credit.
 
 ### Who's teaching this course?
 In Winter 2020, this course is being taught by Dr. Ashley Juavinett. I'm developing the course with Dr. Brad Voytek (Cognitive Science) who will be teaching a COGS version of the course in the future.
