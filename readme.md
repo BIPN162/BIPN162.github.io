@@ -23,16 +23,16 @@ That's okay, and <i>expected.</i> This course is designed for new coders. If you
 The prerequisites for this course are <b>MATH 11</b> (Introductory Probability & Statistics) & <b>BIPN 100</b> (Human Physiology). We'll rely on a basic understanding of brain regions and the activity of neurons. We'll also be applying principles of statistics to the data. If you think you have enough background in these topics, <a href="https://biology.ucsd.edu/education/undergrad/course/prereq.html">file a waiver.</a>
 
 ### How much work will this course be?
-Like all 4-unit courses at UCSD, this course will meet for 4 hours (T/Th, with discussion sections Friday; <a href="https://act.ucsd.edu/scheduleOfClasses/scheduleOfClassesStudent.htm">Schedule of Classes</a>) and will assign work (including reviewing lecture material) amounting to about 6-8 hours of work outside of class. Each week you will complete a coding problem set that will help you develop the skills you need to work with our datasets. In addition, there will be 2 or 3 bigger projects to complete throughout the course. <a href="https://bipn162.github.io/Overview/">(See the tentative syllabus here.)</a>
+Like all 4-unit courses at UCSD, this course will meet for 4 hours (T/Th, with discussion sections Friday; <a href="https://act.ucsd.edu/scheduleOfClasses/scheduleOfClassesStudent.htm">Schedule of Classes</a>) and will assign work (including reviewing lecture material) amounting to about 6-8 hours of work outside of class. Each week you will complete a coding problem set that will help you develop the skills you need to work with our datasets. In addition, there will be 2 slightly larger projects to complete towards the end of the course. <a href="https://docs.google.com/document/d/1a8dc427HPaiPie4Ki6FfSAR7kS9MD8NS6OYuMKk0ZoE/edit?usp=sharing">(See the tentative syllabus for WI20 here.)</a>
 
 ### I'm a biology major. Why should I care about coding?
 Programming and data science skills are increasingly useful in biology and <a href="https://medium.com/the-spike/a-neural-data-science-how-and-why-d7e3969086f2">neuroscience in particular</a>. The ability to code will enable you to acquire, analyze, and visualize your data. Plus, coding is quite useful beyond biology -- why not learn while looking at brains?
 
 ### Is this course open to graduate students?
-Yes! The code is BGGN 240. I'll ask that you complete a bonus small project for graduate credit.
+Yes! The code is BGGN 240. I'll ask that you complete a bonus assignment for graduate credit.
 
 ### Who's teaching this course?
-In Winter 2020, this course is being taught by Dr. Ashley Juavinett. I'm developing the course with Dr. Brad Voytek (Cognitive Science) who will be teaching a COGS version of the course in the future.
+In Winter and Summer 2020, this course is being taught by Dr. Ashley Juavinett. I'm developing the course with Dr. Brad Voytek (Cognitive Science) who will be teaching a COGS version of the course in the future.
 
 <figure>
  <img src="https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg?raw=true" alt="instructors"/>
