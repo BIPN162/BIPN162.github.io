@@ -46,7 +46,7 @@ number_toc_chapters: true         # Whether to add numbers to chapters in your T
 search_max_words_in_content: 100   # In the search function, use at most this many words (too many words will make search slow)
 
 # Controlling page information
-page_titles: infer                      # Either `None`, `infer`, or `toc`
+page_titles: None                      # Either `None`, `infer`, or `toc`
 page_authors: None                     # Either `None` or `infer`
 filename_title_split_character: _     # If inferring titles based on filename, splt on this character.
 
@@ -65,7 +65,7 @@ jupyterhub_url: ''                     # The URL for your JupyterHub. If no URL,
 jupyterhub_interact_text: Interact             # The text that interact buttons will contain.
 
 # Binder link settings
-use_binder_button: false                 # If 'true', add a binder button for interactive links
+use_binder_button: True                 # If 'true', add a binder button for interactive links
 binderhub_url: https://mybinder.org                        # The URL for your BinderHub. If no URL, use ""
 binder_repo_base: https://github.com/                     # The site on which the textbook repository is hosted
 binder_repo_org: BIPN162                     # The username or organization that owns this repository
@@ -124,7 +124,7 @@ defaults:
     toc_icon: list-ul
     excerpt: ''
 
-favicon_path: images/logo/favicon.ico
+favicon_path: images/logo/BIPN162logo-01.png
 
 # Markdown Processing
 markdown: kramdown
