@@ -36,9 +36,5 @@ Yes! The code is BGGN 240. I'll ask that you complete a bonus assignment for gra
 ### Who's teaching this course?
 In Winter and Summer 2020, this course is being taught by Dr. Ashley Juavinett. I'm developing the course with Dr. Brad Voytek (Cognitive Science) who will be teaching a COGS version of the course in the future.
 
-<figure>
- <img src="https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg?raw=true" alt="instructors"/>
- <figcaption>
+![](https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/AshleyBrad.jpeg?raw=true)
  Drs. Brad Voytek (left) & Ashley Juavinett (right), in the midst of course development!
- </figcaption>
-</figure>
