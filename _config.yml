@@ -8,6 +8,7 @@
 # For technical reasons, this file is *NOT* reloaded automatically when you use
 # 'bundle exec jekyll serve'. If you change this file, please restart the server process.
 
+<<<<<<< HEAD
 # Site settings
 # These are used to personalize your new site. If you look in the HTML files,
 # you will see them accessed via {{ site.title }}, {{ site.email }}, and so on.
@@ -158,3 +159,6 @@ plugins:
 
 # Jupyter Book version - DO NOT CHANGE THIS. It is generated when a new book is created
 jupyter_book_version: 0.6.4
+=======
+logo: https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/BIPN162logo-01.png?raw=true
+>>>>>>> 687d29153bb4f987b663fb8080e500579476e4fd
