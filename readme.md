@@ -1,10 +1,13 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 # NeuralDataScience
 Materials for online neural data science book
 =======
 ![](https://github.com/BIPN162/BIPN162.github.io/blob/master/assets/astroneerNDS.gif?raw=true)
 
+=======
+>>>>>>> parent of 687d291... Update readme.md
 =======
 >>>>>>> parent of 687d291... Update readme.md
 =======
