@@ -1,0 +1,622 @@
+---
+redirect_from:
+  - "/neuropixels/neuropixelsimporting"
+interact_link: content/neuropixels/NeuropixelsImporting.ipynb
+kernel_name: python3
+kernel_path: content/neuropixels
+has_widgets: false
+title: |-
+  Importing Neuropixels Files
+pagenum: 10
+prev_page:
+  url: /neuropixels/neuropixels_home.html
+next_page:
+  url: /neuropixels/Optotagging.html
+suffix: .ipynb
+search: session data units notebook want rate here ecephysspikesorting contains list extract example firing well dataframe spike during github com alleninstitute master neuropixels code only loop entire might region interest information ratio violations d maximum drift change depth recording cumulative tree modules meanwaveforms neurons structureacronym swdb examples utilities interact usefully linked our datahub lets say sessions where recordings ca following create get unfortunately looks experiment multiple experiments youll need getsession method sessionlist workflow recorded brain whatever metric youre interested e g append those values rates back around next just take much interesting processed us exists things both terms unit sorted its
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Importing Neuropixels Files</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Neuropixels-Utilities">Neuropixels Utilities<a class="anchor-link" href="#Neuropixels-Utilities"> </a></h1><p>This notebook contains code to interact with the Neuropixels data, usefully linked to on our DataHub.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Import the Neuropixels Cache</span>
+<span class="kn">from</span> <span class="nn">allensdk.brain_observatory.ecephys.ecephys_project_cache</span> <span class="k">import</span> <span class="n">EcephysProjectCache</span>
+
+<span class="c1"># We have all of this data on the datahub! This is where it lives.</span>
+<span class="n">manifest_path</span> <span class="o">=</span> <span class="s1">&#39;/datasets/allen-brain-observatory/visual-coding-neuropixels/ecephys-cache/manifest.json&#39;</span> 
+
+<span class="c1"># Create the EcephysProjectCache object</span>
+<span class="n">cache</span> <span class="o">=</span> <span class="n">EcephysProjectCache</span><span class="o">.</span><span class="n">fixed</span><span class="p">(</span><span class="n">manifest</span><span class="o">=</span><span class="n">manifest_path</span><span class="p">)</span>
+
+<span class="c1"># Get the sessions available in this dataset</span>
+<span class="n">sessions</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_session_table</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Total number of sessions: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sessions</span><span class="p">)))</span>
+<span class="n">sessions</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Total number of sessions: 58
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>published_at</th>
+      <th>specimen_id</th>
+      <th>session_type</th>
+      <th>age_in_days</th>
+      <th>sex</th>
+      <th>full_genotype</th>
+      <th>unit_count</th>
+      <th>channel_count</th>
+      <th>probe_count</th>
+      <th>ecephys_structure_acronyms</th>
+    </tr>
+    <tr>
+      <th>id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>715093703</th>
+      <td>2019-10-03T00:00:00Z</td>
+      <td>699733581</td>
+      <td>brain_observatory_1.1</td>
+      <td>118.0</td>
+      <td>M</td>
+      <td>Sst-IRES-Cre/wt;Ai32(RCL-ChR2(H134R)_EYFP)/wt</td>
+      <td>884</td>
+      <td>2219</td>
+      <td>6</td>
+      <td>[CA1, VISrl, nan, PO, LP, LGd, CA3, DG, VISl, ...</td>
+    </tr>
+    <tr>
+      <th>719161530</th>
+      <td>2019-10-03T00:00:00Z</td>
+      <td>703279284</td>
+      <td>brain_observatory_1.1</td>
+      <td>122.0</td>
+      <td>M</td>
+      <td>Sst-IRES-Cre/wt;Ai32(RCL-ChR2(H134R)_EYFP)/wt</td>
+      <td>755</td>
+      <td>2214</td>
+      <td>6</td>
+      <td>[TH, Eth, APN, POL, LP, DG, CA1, VISpm, nan, N...</td>
+    </tr>
+    <tr>
+      <th>721123822</th>
+      <td>2019-10-03T00:00:00Z</td>
+      <td>707296982</td>
+      <td>brain_observatory_1.1</td>
+      <td>125.0</td>
+      <td>M</td>
+      <td>Pvalb-IRES-Cre/wt;Ai32(RCL-ChR2(H134R)_EYFP)/wt</td>
+      <td>444</td>
+      <td>2229</td>
+      <td>6</td>
+      <td>[MB, SCig, PPT, NOT, DG, CA1, VISam, nan, LP, ...</td>
+    </tr>
+    <tr>
+      <th>732592105</th>
+      <td>2019-10-03T00:00:00Z</td>
+      <td>717038288</td>
+      <td>brain_observatory_1.1</td>
+      <td>100.0</td>
+      <td>M</td>
+      <td>wt/wt</td>
+      <td>824</td>
+      <td>1847</td>
+      <td>5</td>
+      <td>[grey, VISpm, nan, VISp, VISl, VISal, VISrl]</td>
+    </tr>
+    <tr>
+      <th>737581020</th>
+      <td>2019-10-03T00:00:00Z</td>
+      <td>718643567</td>
+      <td>brain_observatory_1.1</td>
+      <td>108.0</td>
+      <td>M</td>
+      <td>wt/wt</td>
+      <td>568</td>
+      <td>2218</td>
+      <td>6</td>
+      <td>[grey, VISmma, nan, VISpm, VISp, VISl, VISrl]</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's say we only want sessions where the data has recordings from CA1. We can do the following to create a session list that we want.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Create a session list based on some criteria</span>
+
+<span class="n">session_list</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span><span class="n">structure_list</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sessions</span><span class="p">[</span><span class="s1">&#39;ecephys_structure_acronyms&#39;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="s1">&#39;CA1&#39;</span> <span class="ow">in</span> <span class="n">structure_list</span><span class="p">:</span>
+        <span class="n">session_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sessions</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">idx</span><span class="p">])</span>   
+        
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">session_list</span><span class="p">))</span><span class="o">+</span><span class="s1">&#39; sessions that meet this criteria:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">session_list</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>There are 52 sessions that meet this criteria:
+[715093703, 719161530, 721123822, 743475441, 744228101, 746083955, 750332458, 750749662, 751348571, 754312389, 754829445, 755434585, 756029989, 757216464, 757970808, 758798717, 759883607, 760345702, 761418226, 762602078, 763673393, 766640955, 767871931, 768515987, 771160300, 771990200, 773418906, 774875821, 778240327, 778998620, 779839471, 781842082, 786091066, 787025148, 789848216, 791319847, 793224716, 794812542, 797828357, 798911424, 799864342, 816200189, 819186360, 819701982, 821695405, 829720705, 831882777, 835479236, 839068429, 839557629, 840012044, 847657808]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, we can use the session list to get the data we want. Unfortunately, it looks like we can only extract one experiment as a time, so if you want to do this for multiple experiments, you'll need to loop over the <code>get_session-data</code> method for your entire session_list. For example, your workflow might be:</p>
+<ol>
+<li>Extract one session.</li>
+<li>Look for units recorded from your brain region of interest in that session.</li>
+<li>Extract whatever metric you're interested in (e.g., firing rate).</li>
+<li>Append those values to a list of firing rates.</li>
+<li>Loop back around to the next session.</li>
+</ol>
+<p>Here, we'll just take the first session as an example.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">session</span> <span class="o">=</span> <span class="n">cache</span><span class="o">.</span><span class="n">get_session_data</span><span class="p">(</span><span class="n">session_list</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Much of the interesting, processed data for us exists in the <code>units</code> dataframe. This dataframe contains information about a number of things, both in terms of how well the unit was sorted, and what its properties might be:</p>
+<ul>
+<li><strong>firing rate</strong>: mean spike rate during the entire session</li>
+<li><strong>presence ratio</strong>: fraction of session when spikes are present</li>
+<li><strong>ISI violations</strong>: rate of refractory period violations</li>
+<li><strong>Isolation distances</strong>: distance to nearest cluster in Mihalanobis space</li>
+<li><strong>d'</strong>: classification accuracy based on LDA</li>
+<li><strong>SNR</strong>: signal to noise ratio</li>
+<li><strong>Maximum drift</strong>: Maximum change in spike depth during recording</li>
+<li><strong>Cumulative drift</strong>: Cumulative change in spike depth during recording</li>
+<li><strong>1D Waveform features</strong>: For more information on these see <a href="https://github.com/AllenInstitute/ecephys_spike_sorting/tree/master/ecephys_spike_sorting/modules/quality_metrics">quality metrics</a> and <a href="https://github.com/AllenInstitute/ecephys_spike_sorting/tree/master/ecephys_spike_sorting/modules/mean_waveforms">mean_waveforms</a></li>
+</ul>
+<p>You can use <code>session.units.columns</code> to see everything that this dataframe contains. Here "units" are individually identified neurons.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">session</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>Index([&#39;L_ratio&#39;, &#39;amplitude_cutoff&#39;, &#39;anterior_posterior_ccf_coordinate&#39;,
+       &#39;area_rf&#39;, &#39;azimuth_rf&#39;, &#39;c50_dg&#39;, &#39;channel_local_index&#39;, &#39;cluster_id&#39;,
+       &#39;cumulative_drift&#39;, &#39;d_prime&#39;, &#39;dorsal_ventral_ccf_coordinate&#39;,
+       &#39;ecephys_structure_acronym&#39;, &#39;ecephys_structure_id&#39;, &#39;elevation_rf&#39;,
+       &#39;f1_f0_dg&#39;, &#39;fano_dg&#39;, &#39;fano_fl&#39;, &#39;fano_ns&#39;, &#39;fano_rf&#39;, &#39;fano_sg&#39;,
+       &#39;firing_rate&#39;, &#39;firing_rate_dg&#39;, &#39;firing_rate_fl&#39;, &#39;firing_rate_ns&#39;,
+       &#39;firing_rate_rf&#39;, &#39;firing_rate_sg&#39;, &#39;g_dsi_dg&#39;, &#39;g_osi_dg&#39;, &#39;g_osi_sg&#39;,
+       &#39;image_selectivity_ns&#39;, &#39;isi_violations&#39;, &#39;isolation_distance&#39;,
+       &#39;left_right_ccf_coordinate&#39;, &#39;lifetime_sparseness_dg&#39;,
+       &#39;lifetime_sparseness_fl&#39;, &#39;lifetime_sparseness_ns&#39;,
+       &#39;lifetime_sparseness_rf&#39;, &#39;lifetime_sparseness_sg&#39;, &#39;local_index_unit&#39;,
+       &#39;location&#39;, &#39;max_drift&#39;, &#39;mod_idx_dg&#39;, &#39;nn_hit_rate&#39;, &#39;nn_miss_rate&#39;,
+       &#39;on_off_ratio_fl&#39;, &#39;p_value_rf&#39;, &#39;peak_channel_id&#39;,
+       &#39;pref_image_multi_ns&#39;, &#39;pref_image_ns&#39;, &#39;pref_ori_dg&#39;,
+       &#39;pref_ori_multi_dg&#39;, &#39;pref_ori_multi_sg&#39;, &#39;pref_ori_sg&#39;,
+       &#39;pref_phase_multi_sg&#39;, &#39;pref_phase_sg&#39;, &#39;pref_sf_multi_sg&#39;,
+       &#39;pref_sf_sg&#39;, &#39;pref_tf_dg&#39;, &#39;pref_tf_multi_dg&#39;, &#39;presence_ratio&#39;,
+       &#39;probe_description&#39;, &#39;probe_has_lfp_data&#39;, &#39;probe_horizontal_position&#39;,
+       &#39;probe_id&#39;, &#39;probe_lfp_sampling_rate&#39;, &#39;probe_sampling_rate&#39;,
+       &#39;probe_vertical_position&#39;, &#39;run_mod_dg&#39;, &#39;run_mod_fl&#39;, &#39;run_mod_ns&#39;,
+       &#39;run_mod_rf&#39;, &#39;run_mod_sg&#39;, &#39;run_pval_dg&#39;, &#39;run_pval_fl&#39;, &#39;run_pval_ns&#39;,
+       &#39;run_pval_rf&#39;, &#39;run_pval_sg&#39;, &#39;silhouette_score&#39;, &#39;snr&#39;,
+       &#39;time_to_peak_ns&#39;, &#39;waveform_PT_ratio&#39;, &#39;waveform_amplitude&#39;,
+       &#39;waveform_duration&#39;, &#39;waveform_halfwidth&#39;, &#39;waveform_recovery_slope&#39;,
+       &#39;waveform_repolarization_slope&#39;, &#39;waveform_spread&#39;,
+       &#39;waveform_velocity_above&#39;, &#39;waveform_velocity_below&#39;],
+      dtype=&#39;object&#39;)</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># See the units dataframe for this session; this takes a few minutes to load.</span>
+<span class="n">session</span><span class="o">.</span><span class="n">units</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>amplitude_cutoff</th>
+      <th>max_drift</th>
+      <th>d_prime</th>
+      <th>waveform_halfwidth</th>
+      <th>waveform_velocity_above</th>
+      <th>cluster_id</th>
+      <th>local_index_unit</th>
+      <th>nn_miss_rate</th>
+      <th>silhouette_score</th>
+      <th>isolation_distance</th>
+      <th>...</th>
+      <th>ecephys_structure_id</th>
+      <th>ecephys_structure_acronym</th>
+      <th>anterior_posterior_ccf_coordinate</th>
+      <th>dorsal_ventral_ccf_coordinate</th>
+      <th>left_right_ccf_coordinate</th>
+      <th>probe_description</th>
+      <th>location</th>
+      <th>probe_sampling_rate</th>
+      <th>probe_lfp_sampling_rate</th>
+      <th>probe_has_lfp_data</th>
+    </tr>
+    <tr>
+      <th>unit_id</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>950910352</th>
+      <td>0.057700</td>
+      <td>34.38</td>
+      <td>4.576155</td>
+      <td>0.096147</td>
+      <td>-0.137353</td>
+      <td>6</td>
+      <td>6</td>
+      <td>0.008277</td>
+      <td>0.080869</td>
+      <td>69.455405</td>
+      <td>...</td>
+      <td>215.0</td>
+      <td>APN</td>
+      <td>8157</td>
+      <td>3521</td>
+      <td>6697</td>
+      <td>probeA</td>
+      <td></td>
+      <td>29999.954846</td>
+      <td>1249.998119</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>950910364</th>
+      <td>0.065649</td>
+      <td>23.43</td>
+      <td>5.602703</td>
+      <td>0.274707</td>
+      <td>-0.618090</td>
+      <td>7</td>
+      <td>7</td>
+      <td>0.002786</td>
+      <td>0.153496</td>
+      <td>102.847616</td>
+      <td>...</td>
+      <td>215.0</td>
+      <td>APN</td>
+      <td>8154</td>
+      <td>3513</td>
+      <td>6698</td>
+      <td>probeA</td>
+      <td></td>
+      <td>29999.954846</td>
+      <td>1249.998119</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>950910371</th>
+      <td>0.015509</td>
+      <td>57.44</td>
+      <td>5.061817</td>
+      <td>0.164824</td>
+      <td>0.274707</td>
+      <td>8</td>
+      <td>8</td>
+      <td>0.007975</td>
+      <td>0.089229</td>
+      <td>76.907610</td>
+      <td>...</td>
+      <td>215.0</td>
+      <td>APN</td>
+      <td>8146</td>
+      <td>3487</td>
+      <td>6701</td>
+      <td>probeA</td>
+      <td></td>
+      <td>29999.954846</td>
+      <td>1249.998119</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>950910392</th>
+      <td>0.025891</td>
+      <td>33.65</td>
+      <td>4.219074</td>
+      <td>0.109883</td>
+      <td>0.000000</td>
+      <td>11</td>
+      <td>11</td>
+      <td>0.002874</td>
+      <td>0.139601</td>
+      <td>65.671206</td>
+      <td>...</td>
+      <td>215.0</td>
+      <td>APN</td>
+      <td>8133</td>
+      <td>3444</td>
+      <td>6707</td>
+      <td>probeA</td>
+      <td></td>
+      <td>29999.954846</td>
+      <td>1249.998119</td>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>950910435</th>
+      <td>0.010061</td>
+      <td>27.84</td>
+      <td>6.393051</td>
+      <td>0.123618</td>
+      <td>-0.068677</td>
+      <td>17</td>
+      <td>17</td>
+      <td>0.016699</td>
+      <td>0.146494</td>
+      <td>294.002222</td>
+      <td>...</td>
+      <td>215.0</td>
+      <td>APN</td>
+      <td>8110</td>
+      <td>3367</td>
+      <td>6719</td>
+      <td>probeA</td>
+      <td></td>
+      <td>29999.954846</td>
+      <td>1249.998119</td>
+      <td>True</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 89 columns</p>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>From here, you can subset for neurons in your region of interest (in the <code>structure_acronym</code> column). For example, <code>session.units[session.units.structure_acronym=='VISp']</code>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="About-this-notebook">About this notebook<a class="anchor-link" href="#About-this-notebook"> </a></h2><p>Code here taken from the <a href="https://github.com/AllenInstitute/SWDB_2019/blob/master/DynamicBrain/Neuropixels_walkthrough.ipynb">SWDB_2019 notebook</a>. Check it that notebook as well as <a href="https://allensdk.readthedocs.io/en/latest/_static/examples/nb/ecephys_session.html#Running-speed">this one</a> for more examples of what you can do with this data.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

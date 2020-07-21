@@ -1,0 +1,333 @@
+---
+redirect_from:
+  - "/ish/ish-api"
+interact_link: content/ISH/ISH_api.ipynb
+kernel_name: python3
+kernel_path: content/ISH
+has_widgets: false
+title: |-
+  Importing ISH Data
+pagenum: 8
+prev_page:
+  url: /ISH/ISH_home.html
+next_page:
+  url: /neuropixels/neuropixels_home.html
+suffix: .ipynb
+search: structures brain query api well allen data mouse target contrast pandas step results institute situ hybridization atlas differential expression set visual cortex into dataframe import also define service search our accessing used pull gene ish compares gives fold change value reveals reported genes relative here layers layer areas pulled converted easily viewed analyzed setup need different packages communicate requests json usual pd configure below url where database vary slightly based kind youd conduct documentation restful model access help map org pages viewpage action pageid details wed compare going instruct ontology structure ids run organize weve configured mousedifferential get put
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Importing ISH Data</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Accessing-the-Allen-Brain-Institute-In-Situ-Hybridization-Data">Accessing the Allen Brain Institute <em>In Situ</em> Hybridization Data<a class="anchor-link" href="#Accessing-the-Allen-Brain-Institute-In-Situ-Hybridization-Data"> </a></h1><p>The Allen Brain Atlas API is used to pull differential gene expression from the mouse <em>in situ</em> hybridization (ISH) data. This compares a set of target structures to a set of contrast structures and gives a <strong>fold-change</strong> value that reveals the expression of reported genes in the target structures relative to the contrast structures.</p>
+<p>Here, the target structures are layers 2/3 of the mouse visual cortex, and the contrast structures the layer 5 visual cortex areas. The data pulled from the API is then converted into a Pandas Dataframe so that it can more easily be viewed and analyzed.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Step-1.-Setup.">Step 1. Setup.<a class="anchor-link" href="#Step-1.-Setup."> </a></h2><p>First, we need to import two different packages to communicate with the API: <code>requests</code> and <code>json</code>. As usual, we'll also import <code>pandas</code> as <code>pd</code>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Step-2.-Configure-API-query.">Step 2. Configure API query.<a class="anchor-link" href="#Step-2.-Configure-API-query."> </a></h2><p>Below, we'll define the <code>service</code>, or URL, where we can query the database. This will vary slightly based on the kind of search you'd like to conduct. See the Allen Brain Institute documentation on <a href="http://help.brain-map.org/pages/viewpage.action?pageId=5308449">RESTful Model Access</a> for more details.</p>
+<p>We can then define <code>structures</code> that we'd like to compare. We are also going to instruct the query to use the 'Mouse Brain Atlas' ontology.</p>
+<p>We'll first query the API to find the structure IDs.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">service</span> <span class="o">=</span> <span class="s1">&#39;http://api.brain-map.org/api/v2/data/query.json?criteria=&#39;</span> 
+<span class="n">structures_1</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Primary visual area, layer 2/3&#39;</span><span class="p">]</span>
+<span class="n">structures_2</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Primary visual area, layer 5&#39;</span><span class="p">]</span>
+<span class="n">ontology</span> <span class="o">=</span> <span class="s1">&#39;Mouse Brain Atlas&#39;</span>
+
+<span class="c1"># Get IDs for examined structures</span>
+<span class="n">ids</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">structures_1</span><span class="p">:</span>
+    <span class="n">structure_id</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">model::Structure,</span><span class="se">\</span>
+<span class="s1">        rma::criteria,[name$il</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">],ontology[name$eq</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">service</span><span class="p">,</span><span class="n">item</span><span class="p">,</span><span class="n">ontology</span><span class="p">))</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+    <span class="n">ids_1</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">structure_id</span><span class="p">))</span>
+    
+<span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">structures_2</span><span class="p">:</span>
+    <span class="n">structure_id</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">model::Structure,</span><span class="se">\</span>
+<span class="s1">        rma::criteria,[name$il</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">],ontology[name$eq</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">]&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">service</span><span class="p">,</span><span class="n">item</span><span class="p">,</span><span class="n">ontology</span><span class="p">))</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s1">&#39;msg&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+    <span class="n">ids_2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">structure_id</span><span class="p">))</span>
+    
+<span class="c1"># Create a single string for each set of structure IDs to use in API</span>
+<span class="n">temp1</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="n">temp2</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ids_1</span><span class="p">:</span>
+    <span class="n">temp1</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ids_2</span><span class="p">:</span>
+    <span class="n">temp2</span> <span class="o">+=</span> <span class="n">i</span> <span class="o">+</span> <span class="s1">&#39;,&#39;</span>
+<span class="n">structures1</span> <span class="o">=</span> <span class="n">temp1</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">structures2</span> <span class="o">=</span> <span class="n">temp2</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_text output_error">
+<pre>
+<span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">ValueError</span>                                Traceback (most recent call last)
+<span class="ansi-green-fg">&lt;ipython-input-15-78142d193f78&gt;</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-intense-fg ansi-bold">     18</span> 
+<span class="ansi-green-intense-fg ansi-bold">     19</span> <span class="ansi-red-fg"># Create a single string for each set of structure IDs to use in API</span>
+<span class="ansi-green-fg">---&gt; 20</span><span class="ansi-red-fg"> </span>temp1<span class="ansi-blue-fg">,</span>temp2 <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">&#39;&#39;</span>
+<span class="ansi-green-intense-fg ansi-bold">     21</span> <span class="ansi-green-fg">for</span> i <span class="ansi-green-fg">in</span> ids_1<span class="ansi-blue-fg">:</span>
+<span class="ansi-green-intense-fg ansi-bold">     22</span>     temp1 <span class="ansi-blue-fg">+=</span> i <span class="ansi-blue-fg">+</span> <span class="ansi-blue-fg">&#39;,&#39;</span>
+
+<span class="ansi-red-fg">ValueError</span>: not enough values to unpack (expected 2, got 0)</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Step-3.-Run-query-&amp;-organize-results.">Step 3. Run query &amp; organize results.<a class="anchor-link" href="#Step-3.-Run-query-&amp;-organize-results."> </a></h2><p>Now that we've configured our search, we can query the "mouse_differential" service to get differential results for our two brain structures. We'll then put the results into a Pandas dataframe.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">all_results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">test</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">start_row</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c1"># API is only able to retrieve 2000 rows at once, loop until none remain</span>
+<span class="k">while</span> <span class="n">test</span><span class="p">:</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">service::mouse_differential[set$eq</span><span class="se">\&#39;</span><span class="s1">mouse</span><span class="se">\&#39;</span><span class="s1">][structures1$eq</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">][structures2$eq</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">][start_row$eq</span><span class="se">\&#39;</span><span class="si">%s</span><span class="se">\&#39;</span><span class="s1">]&#39;</span> \
+                          <span class="o">%</span> <span class="p">(</span><span class="n">service</span><span class="p">,</span> <span class="n">structures1</span><span class="p">,</span> <span class="n">structures2</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">start_row</span><span class="p">)))</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;success&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">all_results</span> <span class="o">+=</span> <span class="n">result</span><span class="p">[</span><span class="s1">&#39;msg&#39;</span><span class="p">]</span>
+        <span class="n">start_row</span> <span class="o">+=</span> <span class="mi">2000</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="kc">False</span>
+        
+<span class="c1"># Organize into dataframe        </span>
+<span class="n">mouse_differential</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_results</span><span class="p">)</span>
+<span class="n">mouse_differential</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>name</th>
+      <th>gene-id</th>
+      <th>gene-symbol</th>
+      <th>gene-name</th>
+      <th>entrez-id</th>
+      <th>chromosome</th>
+      <th>plane-of-section</th>
+      <th>specimen-id</th>
+      <th>fold-change</th>
+      <th>target-sum</th>
+      <th>contrast-sum</th>
+      <th>num-target-samples</th>
+      <th>num-contrast-samples</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>100055069</td>
+      <td>RP_080110_01_A05</td>
+      <td>11714</td>
+      <td>Atp1a1</td>
+      <td>ATPase, Na+/K+ transporting, alpha 1 polypeptide</td>
+      <td>11928</td>
+      <td>3</td>
+      <td>sagittal</td>
+      <td>n/a</td>
+      <td>10.208</td>
+      <td>1586.732</td>
+      <td>171.975</td>
+      <td>94</td>
+      <td>104</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>73423932</td>
+      <td>RP_051019_03_B09</td>
+      <td>18312</td>
+      <td>Pcp4</td>
+      <td>Purkinje cell protein 4</td>
+      <td>18546</td>
+      <td>16</td>
+      <td>sagittal</td>
+      <td>n/a</td>
+      <td>8.739</td>
+      <td>1801.084</td>
+      <td>206.098</td>
+      <td>106</td>
+      <td>106</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>545100</td>
+      <td>RP_040825_02_D01</td>
+      <td>46815</td>
+      <td>Pgm2l1</td>
+      <td>phosphoglucomutase 2-like 1</td>
+      <td>70974</td>
+      <td>7</td>
+      <td>sagittal</td>
+      <td>n/a</td>
+      <td>7.103</td>
+      <td>1802.017</td>
+      <td>284.020</td>
+      <td>92</td>
+      <td>103</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>112202624</td>
+      <td>RP_110421_01_F02</td>
+      <td>60343</td>
+      <td>Klf7</td>
+      <td>Kruppel-like factor 7 (ubiquitous)</td>
+      <td>93691</td>
+      <td>1</td>
+      <td>coronal</td>
+      <td>n/a</td>
+      <td>6.891</td>
+      <td>920.788</td>
+      <td>151.672</td>
+      <td>74</td>
+      <td>84</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>772</td>
+      <td>RP_Baylor_102947</td>
+      <td>18312</td>
+      <td>Pcp4</td>
+      <td>Purkinje cell protein 4</td>
+      <td>18546</td>
+      <td>16</td>
+      <td>coronal</td>
+      <td>n/a</td>
+      <td>6.556</td>
+      <td>1130.932</td>
+      <td>194.852</td>
+      <td>108</td>
+      <td>122</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+    </main>
+    

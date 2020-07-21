@@ -1,0 +1,976 @@
+---
+redirect_from:
+  - "/two-photon/twophotonimporting"
+interact_link: content/two-photon/TwoPhotonImporting.ipynb
+kernel_name: python3
+kernel_path: content/two-photon
+has_widgets: false
+title: |-
+  Two-Photon Imaging
+pagenum: 9
+prev_page:
+  url: /neuropixels/NeuropixelsImporting.html
+next_page:
+  url: /neuropixels/NeuropixelsImporting.html
+suffix: .ipynb
+search: code data cells div id step alert our brain cell visual create well b method experiment above assign observatory different natural dataframe image class successbtask dataset imaging images href org scenes lines cre object types area stimuli toolboxes line session direction below here lets analyze calcium choose examine specific map three import need get areas markdown using experiments where just maximum projection actually order preferred stimulus help mouse its type responses raw information found table extract four inspect five six seven selectivity already created list boc us block text column codeexptcont take plot axis those allen cortex roles imshow documentation
+
+comment: "***PROGRAMMATICALLY GENERATED, DO NOT EDIT. SEE ORIGINAL FILES IN /content***"
+---
+
+    <main class="jupyter-page">
+    <div id="page-info"><div id="page-title">Two-Photon Imaging</div>
+</div>
+    
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Brain-Observatory:-What-are-those-cells-doing?">Brain Observatory: <em>What are those cells doing?</em><a class="anchor-link" href="#Brain-Observatory:-What-are-those-cells-doing?"> </a></h1><h3 id="This-sandbox-will-help-you-analyze-a-dataset-from-the-Allen-Brain-Institute's-Brain-Observatory.">This sandbox will help you analyze a dataset from the Allen Brain Institute's Brain Observatory.<a class="anchor-link" href="#This-sandbox-will-help-you-analyze-a-dataset-from-the-Allen-Brain-Institute's-Brain-Observatory."> </a></h3><p>These datasets contain calcium imaging data for various different cell types in the visual cortex of the mouse. It's likely that these cell types have different roles in the visual system -- your mission is to figure out what these roles are. You will choose a visual area, a cell type, and look at their responses to natural stimuli:</p>
+<h3 id="By-the-end-of-this-lesson,-you-will-be-able-to:">By the end of this lesson, you will be able to:<a class="anchor-link" href="#By-the-end-of-this-lesson,-you-will-be-able-to:"> </a></h3><ol>
+<li>Examine a 2-photon imaging dataset for a particular cell type, in a specific visual area.</li>
+<li>Use imshow to visualize two-dimensional images in Python.</li>
+<li>Create plots of raw calcium imaging data.</li>
+</ol>
+<p>Additional information on this dataset, and how it was collected, can be found <a href="http://help.brain-map.org/display/observatory/Data+-+Visual+Coding">here</a> as well as in the <a href="http://alleninstitute.github.io/AllenSDK/brain_observatory.html">SDK documentation</a>.</p>
+<h3 id="Table-of-Contents">Table of Contents<a class="anchor-link" href="#Table-of-Contents"> </a></h3><ol>
+<li><a href="#one">Step One: Importing toolboxes</a></li>
+<li><a href="#two">Step Two: Choose a transgenic line</a></li>
+<li><a href="#three">Step Three: Extract an experiment session</a></li>
+<li><a href="#four">Step Four: Download &amp; inspect the natural scenes imaging session</a></li>
+<li><a href="#five">Step Five: Look at the calcium transients of your cells</a></li>
+<li><a href="#six">Step Six: Look at the response of your cells to natural scene</a></li>
+<li><a href="#seven">Step Seven: Examine the direction selectivity of your cell</a></li>
+</ol>
+<p><a id="one"></a></p>
+<h2 id="Step-1.-Importing-toolboxes">Step 1. Importing toolboxes<a class="anchor-link" href="#Step-1.-Importing-toolboxes"> </a></h2><p>First, we'll import the necessary toolboxes to run this code. The first chunk of "import" lines will bring in some standard toolboxes that we need. For example, "numpy" is a toolbox that has functions to work with large arrays. The second chunk of import lines brings in some toolboxes that the Allen Brain Observatory has already packaged, to help users analyze its data.</p>
+<div class="alert alert-success"><b>Task</b>: In addition to the modules already imported below, import <code>numpy</code>, <code>pandas</code>, and <code>matplotlib.pyplot</code> as their conventional names.</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Standard toolboxes</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+
+<span class="c1"># Allen specific toolboxes</span>
+<span class="kn">import</span> <span class="nn">allensdk.brain_observatory.stimulus_info</span> <span class="k">as</span> <span class="nn">stim_info</span>
+<span class="kn">from</span> <span class="nn">allensdk.core.brain_observatory_cache</span> <span class="k">import</span> <span class="n">BrainObservatoryCache</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Similar to how we created an instance of the CellTypesCache, here we'll create an instance of the "BrainObservatoryCache." The datahub already has a manifest file available in the directory you see below. This directory also has all of the data we need.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># We will create an instance of the Brain Observatory Cache as an object, &quot;boc.&quot;</span>
+<span class="n">boc</span> <span class="o">=</span> <span class="n">BrainObservatoryCache</span><span class="p">(</span><span class="n">manifest_file</span><span class="o">=</span><span class="s1">&#39;/datasets/allen-brain-observatory/visual-coding-2p/manifest.json&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a id="two"></a></p>
+<h2 id="Step-2.-Get-a-list-of-all-possible-transgenic-mouse-lines-and-brain-areas,-and-choose-which-to-work-with.">Step 2. Get a list of all possible transgenic mouse lines and brain areas, and choose which to work with.<a class="anchor-link" href="#Step-2.-Get-a-list-of-all-possible-transgenic-mouse-lines-and-brain-areas,-and-choose-which-to-work-with."> </a></h2><p>Next, we'll ask that "boc" structure to tell us what all of the possible Cre lines and brain areas are that we can analyze. You'll need to use these exact names when you're trying to pull a specific one from the dataset.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># We&#39;ll save the list of cre lines as a variable, &#39;cre-lines&#39;.</span>
+<span class="n">cre_lines</span> <span class="o">=</span> <span class="n">boc</span><span class="o">.</span><span class="n">get_all_cre_lines</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;all cre lines: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cre_lines</span><span class="p">))</span>
+
+<span class="c1"># We&#39;ll save the list of possible structures as a variable, &#39;brain_areas&#39;.</span>
+<span class="n">brain_areas</span> <span class="o">=</span> <span class="n">boc</span><span class="o">.</span><span class="n">get_all_targeted_structures</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;all brain regions: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">brain_areas</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>all cre lines: [&#39;Cux2-CreERT2&#39;, &#39;Emx1-IRES-Cre&#39;, &#39;Fezf2-CreER&#39;, &#39;Nr5a1-Cre&#39;, &#39;Ntsr1-Cre_GN220&#39;, &#39;Pvalb-IRES-Cre&#39;, &#39;Rbp4-Cre_KL100&#39;, &#39;Rorb-IRES2-Cre&#39;, &#39;Scnn1a-Tg3-Cre&#39;, &#39;Slc17a7-IRES2-Cre&#39;, &#39;Sst-IRES-Cre&#39;, &#39;Tlx3-Cre_PL56&#39;, &#39;Vip-IRES-Cre&#39;]
+all brain regions: [&#39;VISal&#39;, &#39;VISam&#39;, &#39;VISl&#39;, &#39;VISp&#39;, &#39;VISpm&#39;, &#39;VISrl&#39;]
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<div style="background: #DFF0D8; border-radius: 3px; padding: 10px;">
+<p><b>Task:</b>  Choose a visual area and Cre line from the lists above to examine in the rest of the notebook. Refer back to our lecture slides or the <a href="http://observatory.brain-map.org/visualcoding">Brain Observatory landing page</a> to learn more about these different visual areas. Primary cortex (VISp) is surrounded by several other brain regions, which have unknown functions.
+
+You can find more info about the Cre-lines here <a href="http://observatory.brain-map.org/visualcoding/transgenic">here</a>.
+
+1. Create a new block of **Markdown** text below this one which briefly describes your visual area and Cre line. Remember that markdown is the other type of block that Jupyter supports. You can change your block to Markdown using the dropdown in the menu above. Check out <a href="https://www.markdownguide.org/cheat-sheet/">this cheatsheet</a> for a few handy elements of Markdown syntax.
+2. Assign your visual area and cre line to <code>visual_area</code> and <code>cre_line</code>, respectively.
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Visual area &amp; cre-line below.</span>
+<span class="n">visual_area</span> <span class="o">=</span> <span class="s1">&#39;VISal&#39;</span>
+<span class="n">cre_line</span> <span class="o">=</span> <span class="s1">&#39;Rorb-IRES2-Cre&#39;</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a id="three"></a></p>
+<h2 id="Step-3.-Extract-an-experiment-session.">Step 3. Extract an experiment session.<a class="anchor-link" href="#Step-3.-Extract-an-experiment-session."> </a></h2><div class="alert alert-success"><b>Task</b>: Create a dataframe of experiments.</div><ol>
+<li>Use the <code>get_experiment_containers()</code> method of our <code>boc</code> object to get a list of experiments that are available. This method takes the arguments <code>targeted_structures=</code> as well as <code>cre_lines=</code>, which both require a list. Assign the outcome of this method to <code>experiments</code>.</li>
+<li>Create a dataframe out of <code>exps</code> and assign it to <code>exps_df</code>.</li>
+<li>There isn't an experiment for every combination of Cre lines and visual areas above. Add an <code>if</code> statement that will print a statement for you if the dataframe you created is empty (Hint: use <code>empty</code> attribute).</li>
+<li>Show the head of your dataframe.</li>
+</ol>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">exps</span> <span class="o">=</span> <span class="n">boc</span><span class="o">.</span><span class="n">get_experiment_containers</span><span class="p">(</span><span class="n">targeted_structures</span><span class="o">=</span><span class="p">[</span><span class="n">visual_area</span><span class="p">],</span><span class="n">cre_lines</span><span class="o">=</span><span class="p">[</span><span class="n">cre_line</span><span class="p">],)</span>
+
+<span class="c1"># Create a dataframe and show us the beginning of it</span>
+<span class="c1"># If there aren&#39;t experiments with that combination, you&#39;ll get an error message.</span>
+<span class="n">exps_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">exps</span><span class="p">)</span>
+<span class="k">if</span>  <span class="n">exps_df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;There are not any experiments for that cre-driver line and visual area combination.&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Change either/and your visual_area and cre_line in the code above, and re-run.&#39;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;All experiments for &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">cre_line</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; cells in &quot;</span> <span class="o">+</span> <span class="n">visual_area</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span><span class="p">)</span>
+<span class="n">exps_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>All experiments for Rorb-IRES2-Cre cells in VISal: 
+</pre>
+</div>
+</div>
+</div>
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>id</th>
+      <th>imaging_depth</th>
+      <th>targeted_structure</th>
+      <th>cre_line</th>
+      <th>reporter_line</th>
+      <th>donor_name</th>
+      <th>specimen_name</th>
+      <th>tags</th>
+      <th>failed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>511510723</td>
+      <td>275</td>
+      <td>VISal</td>
+      <td>Rorb-IRES2-Cre</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>222431</td>
+      <td>Rorb-IRES2-Cre;Camk2a-tTA;Ai93-222431</td>
+      <td>[]</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>511510794</td>
+      <td>275</td>
+      <td>VISal</td>
+      <td>Rorb-IRES2-Cre</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>231120</td>
+      <td>Rorb-IRES2-Cre;Camk2a-tTA;Ai93-231120</td>
+      <td>[]</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>569396922</td>
+      <td>275</td>
+      <td>VISal</td>
+      <td>Rorb-IRES2-Cre</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>284418</td>
+      <td>Rorb-IRES2-Cre;Camk2a-tTA;Ai93-284418</td>
+      <td>[]</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>511500480</td>
+      <td>275</td>
+      <td>VISal</td>
+      <td>Rorb-IRES2-Cre</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>232623</td>
+      <td>Rorb-IRES2-Cre;Camk2a-tTA;Ai93-232623</td>
+      <td>[]</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>511510860</td>
+      <td>275</td>
+      <td>VISal</td>
+      <td>Rorb-IRES2-Cre</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>228786</td>
+      <td>Rorb-IRES2-Cre;Camk2a-tTA;Ai93-228786</td>
+      <td>[]</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Once you've successfully found a combination that works, you should have the head of your dataframe above. Let's look into one of these experiment containers, most of which have three different sessions for different types of visual stimuli.</p>
+<div class="alert alert-success"><b>Task:</b>
+
+1. Pick an experiment from the table above. Copy the id in the "id" column and assign it to <code>experiment_container_id</code>.
+2. Use the <code>get.ophys_experiments.()</code> method on our <code>boc</code> object, providing it with the arguments <code>experiment_container_ids= </code> and <code>stimuli=['natural_scenes']</code>. This will restrict our search to experiments with our ID and where natural stimuli were shown. Assign this to <code>expt_cont</code>.
+3. Look at the <code>expt_cont</code> object. What kind of object is this?
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">experiment_container_id</span> <span class="o">=</span> <span class="mi">511510723</span>
+<span class="n">expt_cont</span> <span class="o">=</span> <span class="n">boc</span><span class="o">.</span><span class="n">get_ophys_experiments</span><span class="p">(</span><span class="n">experiment_container_ids</span><span class="o">=</span><span class="p">[</span><span class="n">experiment_container_id</span><span class="p">],</span><span class="n">stimuli</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;natural_scenes&#39;</span><span class="p">])</span>
+<span class="n">expt_cont</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[{&#39;id&#39;: 504593468,
+  &#39;imaging_depth&#39;: 275,
+  &#39;targeted_structure&#39;: &#39;VISal&#39;,
+  &#39;cre_line&#39;: &#39;Rorb-IRES2-Cre&#39;,
+  &#39;reporter_line&#39;: &#39;Ai93(TITL-GCaMP6f)&#39;,
+  &#39;acquisition_age_days&#39;: 128,
+  &#39;experiment_container_id&#39;: 511510723,
+  &#39;session_type&#39;: &#39;three_session_B&#39;,
+  &#39;donor_name&#39;: &#39;222431&#39;,
+  &#39;specimen_name&#39;: &#39;Rorb-IRES2-Cre;Camk2a-tTA;Ai93-222431&#39;,
+  &#39;fail_eye_tracking&#39;: True}]</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Now, let's get the id for this experiment and extract the data using the <code>get_ophys_experiment_data</code> method.</p>
+<div class="alert alert-success"><b>Task</b>:   
+
+1. Programmatically, assign the 'id' of your <code>expt_cont</code> object to <code>session_id</code>.
+2. Use the <code>get_ophys_experiment_data()</code> method, simply giving it your session_id as an argument, and assign the output of this to <code>data</code>.
+3. What kind of object is data?
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">session_id</span> <span class="o">=</span> <span class="n">expt_cont</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;id&#39;</span><span class="p">]</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">boc</span><span class="o">.</span><span class="n">get_ophys_experiment_data</span><span class="p">(</span><span class="n">session_id</span><span class="p">)</span>
+<span class="n">data</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>&lt;allensdk.core.brain_observatory_nwb_data_set.BrainObservatoryNwbDataSet at 0x7fe7946b8c18&gt;</pre>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a id="four"></a></p>
+<h2 id="Step-4.-Download-&amp;-inspect-the-natural-scenes-imaging-session">Step 4. Download &amp; inspect the natural scenes imaging session<a class="anchor-link" href="#Step-4.-Download-&amp;-inspect-the-natural-scenes-imaging-session"> </a></h2><p>First, we'll look at the session where the mouse viewed natural scenes.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's take a quick look at the data you just acquired. We'll take a maximum projection of the data, so that we can actually see the cells. If we just looked at one snapshot of the raw imaging data, the cells would look dim. A "maximum projection image" shows us the maximum brightness for each pixel, across the entire experiment.</p>
+<p>Below, we are using the <code>get_max_projection()</code> method on our data, and then using the <code>imshow()</code> method in order to see our projection.</p>
+<p><strong>Note</strong>: The weird text for the ylabel is called "TeX" markup, in order to get the greek symbol <em>mu</em> ($\mu$). See documentation <a href="https://matplotlib.org/tutorials/text/mathtext.html">here</a>.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Get the maximum projection (a numpy array) of our data</span>
+<span class="n">max_projection</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_max_projection</span><span class="p">()</span>
+
+<span class="c1"># Create a new figure</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># Use imshow to visualize our numpy array</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">max_projection</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add labels for microns; weird syntax below is to get the micro sign</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\mu$m&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\mu$m&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/two-photon/TwoPhotonImporting_16_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a id="five"></a></p>
+<h2 id="Step-5.-Look-at-the-calcium-transients-of-your-cells">Step 5. Look at the calcium transients of your cells<a class="anchor-link" href="#Step-5.-Look-at-the-calcium-transients-of-your-cells"> </a></h2><p>Now we'll plot the data of each of our cells (from the field of view above) across time. Each line shows the change in fluorescence over baseline ($\Delta$)F/F) of the individual cells. When there are sharp increases, that's when the cells are responding.</p>
+<div class="alert alert-success"><b>Task</b>:
+
+1. Create a for loop that will plot, in succession, the responses of the <b>first ten cells</b> of your dataset, contained in dff. Use 'ts' (the timestamps of the data) for the x axis. 
+2. Add informative labels to your plot. What is the x axis? What's the y axis?
+3. Use <code>plt.xlim()</code> to zoom in on an interesting part of the data.
+4. Inspect the data here -- how fast are these changes in fluorescence happening?
+5. **Challenge**: How could you write this loop so that your traces wouldn't be overlapping?
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Use the `get_dff_traces()` method to return both timestamps (ts, in seconds) as well as the deltaF/F (dff) </span>
+<span class="n">ts</span><span class="p">,</span> <span class="n">dff</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_dff_traces</span><span class="p">()</span>
+
+<span class="c1"># Set up a figure</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+
+<span class="c1"># </span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dff</span><span class="p">)):</span>
+    <span class="c1">#plt.plot(dff[i]+(i*2))</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ts</span><span class="p">,</span><span class="n">dff</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time (s)&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\Delta$F/F&#39;</span><span class="p">,</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">50</span><span class="p">,</span><span class="mi">100</span><span class="p">])</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/two-photon/TwoPhotonImporting_18_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a id="six"></a></p>
+<h2 id="Step-6.-Look-at-the-response-of-your-cells-to-natural-scenes">Step 6. Look at the response of your cells to natural scenes<a class="anchor-link" href="#Step-6.-Look-at-the-response-of-your-cells-to-natural-scenes"> </a></h2><p>Hmm, there are some responses above, but it's tough to see what's going on with just the raw traces. Let's instead see how these cells actually responded to different types of images. To do so, we'll need to use the <code>get_cell_specimens()</code> method on our <code>boc</code>, giving it the name of the experiment container ID to look for. The dataframe that this creates will have a lot more information about what the cells in our experiment prefer.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># Get the cell specimens information for this session</span>
+<span class="n">cell_specimens</span> <span class="o">=</span> <span class="n">boc</span><span class="o">.</span><span class="n">get_cell_specimens</span><span class="p">(</span><span class="n">experiment_container_ids</span><span class="o">=</span><span class="p">[</span><span class="n">experiment_container_id</span><span class="p">])</span>
+<span class="n">cell_specimens_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cell_specimens</span><span class="p">)</span>
+<span class="n">cell_specimens_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea output_execute_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>p_run_mod_sg</th>
+      <th>tlr1_id</th>
+      <th>image_sel_ns</th>
+      <th>tlr1_name</th>
+      <th>g_dsi_dg</th>
+      <th>p_ns</th>
+      <th>specimen_id</th>
+      <th>p_dg</th>
+      <th>time_to_peak_sg</th>
+      <th>pref_dir_dg</th>
+      <th>...</th>
+      <th>peak_dff_ns</th>
+      <th>donor_full_genotype</th>
+      <th>all_stim</th>
+      <th>run_mod_sg</th>
+      <th>pref_sf_sg</th>
+      <th>sfdi_sg</th>
+      <th>g_osi_sg</th>
+      <th>g_osi_dg</th>
+      <th>reliability_nm3</th>
+      <th>reliability_nm2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>NaN</td>
+      <td>265943423</td>
+      <td>NaN</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>0.611780</td>
+      <td>NaN</td>
+      <td>492413952</td>
+      <td>0.059640</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Rorb-IRES2-Cre/wt;Camk2a-tTA/wt;Ai93(TITL-GCaM...</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.191614</td>
+      <td>0.008826</td>
+      <td>0.009560</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0.130037</td>
+      <td>265943423</td>
+      <td>0.343898</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>NaN</td>
+      <td>1.362939e-07</td>
+      <td>492413952</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>3.562033</td>
+      <td>Rorb-IRES2-Cre/wt;Camk2a-tTA/wt;Ai93(TITL-GCaM...</td>
+      <td>False</td>
+      <td>-1.294599</td>
+      <td>NaN</td>
+      <td>0.153539</td>
+      <td>0.981661</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>NaN</td>
+      <td>265943423</td>
+      <td>0.422119</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>NaN</td>
+      <td>1.920522e-10</td>
+      <td>492413952</td>
+      <td>NaN</td>
+      <td>0.19902</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>3.198215</td>
+      <td>Rorb-IRES2-Cre/wt;Camk2a-tTA/wt;Ai93(TITL-GCaM...</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>0.02</td>
+      <td>0.227113</td>
+      <td>0.427495</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>NaN</td>
+      <td>265943423</td>
+      <td>NaN</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>0.767511</td>
+      <td>NaN</td>
+      <td>492413952</td>
+      <td>0.091837</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>NaN</td>
+      <td>Rorb-IRES2-Cre/wt;Camk2a-tTA/wt;Ai93(TITL-GCaM...</td>
+      <td>False</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>0.526386</td>
+      <td>0.191804</td>
+      <td>0.086754</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0.436801</td>
+      <td>265943423</td>
+      <td>0.519169</td>
+      <td>Ai93(TITL-GCaMP6f)</td>
+      <td>NaN</td>
+      <td>5.118950e-02</td>
+      <td>492413952</td>
+      <td>NaN</td>
+      <td>0.13268</td>
+      <td>NaN</td>
+      <td>...</td>
+      <td>6.300556</td>
+      <td>Rorb-IRES2-Cre/wt;Camk2a-tTA/wt;Ai93(TITL-GCaM...</td>
+      <td>False</td>
+      <td>0.938443</td>
+      <td>0.32</td>
+      <td>0.149927</td>
+      <td>0.743993</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 60 columns</p>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Let's create a histogram of preferred images in our dataset.</p>
+<div class="alert alert-success"><b>Task</b>:
+
+1. Create a subset of this dataframe called 'sig_cells' where the column 'p_ns' is less than 0.05. In other words, we only want cells that *significantly* preferred a specific image.
+2. The preferred image ID is in the 'pref_image_ns' column of this dataframe. Assign this to 'pref_images'.
+3. Create a histogram of preferred images with 118 bins (there are 118 different images). There are multiple ways to do this!
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">sig_cells</span> <span class="o">=</span> <span class="n">cell_specimens_df</span><span class="p">[</span><span class="n">cell_specimens_df</span><span class="p">[</span><span class="s1">&#39;p_ns&#39;</span><span class="p">]</span><span class="o">&lt;</span><span class="mf">0.05</span><span class="p">]</span>
+<span class="n">pref_images</span> <span class="o">=</span> <span class="n">sig_cells</span><span class="p">[</span><span class="s1">&#39;pref_image_ns&#39;</span><span class="p">]</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">10</span><span class="p">))</span>
+<span class="n">pref_images</span><span class="o">.</span><span class="n">value_counts</span><span class="p">()</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;number of cells&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;images&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/two-photon/TwoPhotonImporting_22_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Wait, but what is that image? In order to actually see what this stimulus is, first, we'll organize the stimulus table. This tells us which stimulus was played on each trial. This data set has 118 different scenes, and each scene is presented 50 times. Images of the scenes can be found <a href="http://observatory.brain-map.org/visualcoding/stimulus/natural_scenes">here</a>.</p>
+<div class="alert alert-success"><b>Task</b>:
+
+1. Assign your top image to <code>image_id</code>. You can do this programmatically, or simply hard code it.
+2. The 'natural_scene_template' that we create below is a numpy array, where the first dimension is the image id, and the second and third are the values of the image. Use the <code>imshow()</code> method to show the image, just as we did with our maximum projection above.
+
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">natural_scene_table</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_stimulus_table</span><span class="p">(</span><span class="s1">&#39;natural_scenes&#39;</span><span class="p">)</span>
+<span class="n">natural_scene_template</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">get_stimulus_template</span><span class="p">(</span><span class="s1">&#39;natural_scenes&#39;</span><span class="p">)</span>
+<span class="n">sceneIDs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">natural_scene_table</span><span class="o">.</span><span class="n">frame</span><span class="p">)</span>
+
+
+<span class="c1">#choose your image id</span>
+<span class="n">image_id</span> <span class="o">=</span> <span class="mi">28</span>
+
+<span class="c1"># plot this natural scene</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">natural_scene_template</span><span class="p">[</span><span class="n">image_id</span><span class="p">,:,:],</span> <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s1">&#39;off&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="jb_output_wrapper }}">
+<div class="output_area">
+
+
+
+<div class="output_png output_subarea ">
+<img src="../images/two-photon/TwoPhotonImporting_24_0.png"
+>
+</div>
+
+</div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a id="seven"></a></p>
+<h2 id="Step-7.-Examine-the-direction-selectivity-of-your-cell">Step 7. Examine the direction selectivity of your cell<a class="anchor-link" href="#Step-7.-Examine-the-direction-selectivity-of-your-cell"> </a></h2><p>Sometimes, the function of a cell is not particularly clear from natural stimuli. Those stimuli have a lot of information in them, and it might be hard to tell what a cell is actually responding to. Instead, we can use simple drifting gratings to look at one straightforward property of a cell: <b>does it respond to specific directions of movement?</b>&lt;/br&gt;</p>
+<p>We can use the columns that look at the direction selectivity index (DSI) in order to determine whether our cells are direction selective (typically considered having a DSI &gt; 0.5). Take another look at the cell_specimens_df we created above. How would you analyze the data here to see if your cells were direction selective? How would you go back and compare these data to that of other cell types?</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<div class="jb_cell">
+
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># See an exploration of this in the next notebook (Statistics!)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+</div>
+
+ 
+
+
+    </main>
+    
