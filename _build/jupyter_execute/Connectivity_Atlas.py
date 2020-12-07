@@ -51,13 +51,22 @@ trangenic_lines = mouse_exp_df['transgenic_line'].unique()
 trangenic_lines
 
 
+# Let's start by creating a dataframe that only contians experiments with the first three cre lines in the list above *(Penk-IRES2-Cre-neo, Gabrr3-Cre_KC112, Hdc-Cre_IM1)*. Remeber to copy the cre line of interest exactly, including the quotations. 
+
 # In[5]:
 
 
-trangenic_line_exps = pd.DataFrame(mcc.get_experiments(cre = ['Penk-IRES2-Cre-neo', 'Gabrr3-Cre_KC112', 'Hdc-Cre_IM1']))
+# filter experiments from only the first 3 cre lines 
+trangenic_line_exps = pd.DataFrame(mcc.get_experiments(cre = ['Penk-IRES2-Cre-neo', 
+                                                              'Gabrr3-Cre_KC112', 
+                                                              'Hdc-Cre_IM1']))
+
 trangenic_line_exps = trangenic_line_exps.set_index('id')
 
+# print the length of our dataframe 
 print('The Dataframe is' + ' ' + str(len(trangenic_line_exps)) + ' ' + 'entries long')
+
+# confirm the only cre lines are those that were specified 
 print(trangenic_line_exps['transgenic_line'].unique())
 
 trangenic_line_exps.head()
@@ -65,30 +74,80 @@ trangenic_line_exps.head()
 
 # ## Download experimental metadata by injection structure 
 
-# MouseConnectivityCache has a method for retrieving the adult mouse structure tree as an StructureTree class instance. This is done by executing the `get_structure_tree()` method on your MouseConnectivityCache instance (`mcc`). The StructureTree class has many methods that allows you to access lists of brain structures through their ID, name, acronym, and many other properties. Below we will access information on the hypothalamus via its name by calling `get_structures_by_name` on our StructureTree instance. 
+# We could also filter out the experiments by the `injection_structure_ids`. If the IDs of the injection structures are already known, one can input the list of ID numbers to filter out the experiments as so:
 
 # In[6]:
+
+
+# Primary Motor Area experiments have ID 985
+MOp_df = pd.DataFrame(mcc.get_experiments(injection_structure_ids = [985])).set_index('id')
+MOp_df.head()
+
+
+# MouseConnectivityCache has a method for retrieving the adult mouse structure tree as an StructureTree class instance. The StructureTree class has many methods that allows you to access lists of brain structures through their ID, name, acronym, and many other properties. This is done by executing the `get_structure_tree()` method on your MouseConnectivityCache instance (`mcc`).  Below we will access information on the hypothalamus via its name by calling `get_structures_by_name()` on our StructureTree instance. 
+
+# In[7]:
 
 
 # grab the StructureTree instance
 structure_tree = mcc.get_structure_tree()
 
-# get info on isocortex by its name 
+# get info on hypothalamus by its name 
 hypothalamus = structure_tree.get_structures_by_name(['Hypothalamus'])[0]
 hypothalamus
 
 
 # This gives us a dictionary with metadata about our brain structure of interest. For more inofrmation on the different methods to access information on brain structures, click <a href="https://alleninstitute.github.io/AllenSDK/allensdk.core.structure_tree.html">here</a>. 
 
-# What about the rest of the brain structures? How do we find what brain structures are availabe to us? To do so, we can take a look at the unique values under the `name` column, in our summary of brain structures.
+# So far, we know that the Primary Motar Area is a brain structure available to us in our experiments, but what about the rest of the brain structures? How do we find what are all the brain structures availabe to us? To do so, we can take a look at the unique values under the `name` column, in our summary of brain structures. 
 
-# In[7]:
+# **Note:** we will go over structure set ids, `get_structure_sets()`, and the `get_structures_by_set_id()` methods later in this notebook. We will just be using `get_structures_by_set_id()` to access our Summary Structures Data.
+
+# In[8]:
 
 
+# From the above table, "Brain - Summary Structures" has ID 167587189
 summary_structures = structure_tree.get_structures_by_set_id([167587189])
 summary_structures_df = pd.DataFrame(summary_structures)
+
+# Determine how many different structures are within our experiments 
 structure_name = summary_structures_df['name'].unique()
-structure_name
+print("%d Total Available Brain Structures" % len(structure_name))
+
+# print the first 20 brain structures in our data
+print(structure_name[:19])
+
+
+# We know that the Motar Cortex Area has ID 985, but what if we do not know the structure ID? That is not a hard probelm to fix. Like we did earlier, we can access a dictionary of metadata for our structure of interest using our StructureTree helper methods. 
+
+# In[9]:
+
+
+# get info on Ventral tegmental area by its name 
+VTA = structure_tree.get_structures_by_name(['Ventral tegmental area'])[0]
+
+# specify the strucure id by indexixing into the 'id' of `VTA`
+VTA_df = pd.DataFrame(mcc.get_experiments(injection_structure_ids = [VTA['id']]))
+VTA_df.head()
+
+
+# ## Putting it All Together 
+
+# Below is an example of how we can combine both filtering by Cre line and by injection structure to get a more refined set of data.
+
+# In[10]:
+
+
+# select cortical experiments 
+isocortex = structure_tree.get_structures_by_name(['Isocortex'])[0]
+
+# same as before, but restrict the cre line
+rbp4_cortical_experiments = mcc.get_experiments(cre=[ 'Rbp4-Cre_KL100' ], 
+                                                injection_structure_ids=[isocortex['id']])
+
+# convert to a dataframe 
+rbp4_cortical_df = pd.DataFrame(rbp4_cortical_experiments).set_index('id')
+rbp4_cortical_df.head()
 
 
 # As a convenience, structures are grouped in to named collections called "structure sets". These sets can be used to quickly gather a useful subset of structures from the tree. The criteria used to define structure sets are eclectic; a structure set might list:
@@ -99,7 +158,7 @@ structure_name
 # 
 # To see only structure sets relevant to the adult mouse brain, use the StructureTree:
 
-# In[8]:
+# In[11]:
 
 
 from allensdk.api.queries.ontologies_api import OntologiesApi
@@ -113,52 +172,15 @@ structure_set_ids = structure_tree.get_structure_sets()
 pd.DataFrame(oapi.get_structure_sets(structure_set_ids))
 
 
-# In[9]:
+# As you can see from the table above, there are many different sets that our available brain structures can be grouped in. Below we will look into our Mouse Connectivity Summary data by specifying the set ID using the `get_structure_by_set_id()` method. 
+
+# In[12]:
 
 
 # From the above table, "Mouse Connectivity - Summary" has id 687527945
 summary_connectivity = structure_tree.get_structures_by_set_id([687527945])
 summary_connectivity_df = pd.DataFrame(summary_connectivity)
 summary_connectivity_df.head()
-
-
-# We could also filter out the experiments by the `injection_structure`. If the ID of the injection structure is already known, one can simply input the ID number to filter out the experiments as so:
-
-# In[10]:
-
-
-# filter experiments that only contain data on the primary motor area
-MOp_df = pd.DataFrame(mcc.get_experiments(injection_structure_ids = [985])).set_index('id')
-MOp_df.head()
-
-
-# But what if we do not know the structure ID? That is not a hard probelm to fix. Like we did earlier, we can access a dictionary of metadata for our structure of interest using our StructureTree helper methods. 
-
-# In[11]:
-
-
-VTA = structure_tree.get_structures_by_name(['Ventral tegmental area'])[0]
-VTA_df = pd.DataFrame(mcc.get_experiments(injection_structure_ids = [VTA['id']]))
-VTA_df.head()
-
-
-# ## Putting it All Together 
-
-# Below is an example of how we can combine both filtering by Cre line and by injection structure to get a more refined set of data.
-
-# In[12]:
-
-
-# select cortical experiments 
-isocortex = structure_tree.get_structures_by_name(['Isocortex'])[0]
-
-# same as before, but restrict the cre line
-rbp4_cortical_experiments = mcc.get_experiments(cre=[ 'Rbp4-Cre_KL100' ], 
-                                                injection_structure_ids=[isocortex['id']])
-
-# convert to a dataframe 
-rbp4_cortical_df = pd.DataFrame(rbp4_cortical_experiments).set_index('id')
-rbp4_cortical_df.head()
 
 
 # ## Download and visualize gridded projection signal volumes (raw data)
@@ -259,7 +281,7 @@ ax.set_yticklabels(row_labels, minor=False)
 plt.show()
 
 
-# Using another feature of the MouseConnectivityCache, w can show an example of what an image of  fluorescence would look like. The code below demonstrates how you can load the projection density for a particular experiment.
+# Using another feature of the MouseConnectivityCache, we can show an example of what an image of fluorescence would look like for a given experiment. The code below demonstrates how you can load the projection density for a particular experiment and plot it to see how it looks.
 
 # In[17]:
 
