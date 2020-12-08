@@ -91,7 +91,7 @@
   <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../landing_page.html">
-   A Hands-On Guide to Neural Data Science¶
+   A Hands-On Guide to Neural Data Science
   </a>
  </li>
 </ul>
@@ -262,27 +262,6 @@
     <!-- Table of contents -->
     <div class="d-none d-md-block col-md-2 bd-toc show">
         
-        <div class="tocsection onthispage pt-5 pb-3">
-            <i class="fas fa-list"></i> Contents
-        </div>
-        <nav id="bd-toc-nav">
-            <ul class="nav section-nav flex-column">
- <li class="toc-h2 nav-item toc-entry">
-  <a class="reference internal nav-link" href="#plotting-a-single-cells-morphology-accessing-the-morphology-data">
-   5.2.1. Plotting a single cell’s morphology &amp; accessing the morphology data
-  </a>
-  <ul class="nav section-nav flex-column">
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#step-one-get-cells-manipulate-dataframe">
-     5.2.1.1. Step One: Get Cells &amp; Manipulate Dataframe
-    </a>
-   </li>
-  </ul>
- </li>
-</ul>
-
-        </nav>
-        
     </div>
 </div>
     <div id="main-content" class="row">
@@ -292,8 +271,6 @@
                 
   <div class="section" id="morphology-for-single-cells">
 <h1><span class="section-number">5.2. </span>Morphology for Single Cells<a class="headerlink" href="#morphology-for-single-cells" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="plotting-a-single-cells-morphology-accessing-the-morphology-data">
-<h2><span class="section-number">5.2.1. </span>Plotting a single cell’s morphology &amp; accessing the morphology data<a class="headerlink" href="#plotting-a-single-cells-morphology-accessing-the-morphology-data" title="Permalink to this headline">¶</a></h2>
 <p>This section will serve as an introduction to the Allen Cell Types database. We’ll work with the AllenSDK to see what information we can gain about our cells.</p>
 <p>First, we’ll <code class="docutils literal notranslate"><span class="pre">import</span></code> the CellTypesCache module. This module provides tools to allow us to get information from the cell types database. We’re giving it a <strong>manifest</strong> filename as well. CellTypesCache will create this manifest file, which contains metadata about the cache. You can look under cell_types in your directory, and take a look at the file.</p>
 <p>(If you’re curious you can see the full documentation for the core package <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.html">here</a>.)</p>
@@ -312,13 +289,12 @@
 </div>
 </div>
 </div>
-<div class="section" id="step-one-get-cells-manipulate-dataframe">
-<h3><span class="section-number">5.2.1.1. </span>Step One: Get Cells &amp; Manipulate Dataframe<a class="headerlink" href="#step-one-get-cells-manipulate-dataframe" title="Permalink to this headline">¶</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">get_cells</span></code> method downloads metadata for all cells in the database. The database contains human cells and mouse cells. Alternatively, one can filter out the database to only include cells collected from a certain species.
 Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.cell_types_cache.html">the documentation for the CellTypesCache</a> for more information on the <code class="docutils literal notranslate"><span class="pre">get_cells</span></code> method.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_cells</span> <span class="o">=</span> <span class="n">ctc</span><span class="o">.</span><span class="n">get_cells</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># download all cells </span>
+<span class="n">all_cells</span> <span class="o">=</span> <span class="n">ctc</span><span class="o">.</span><span class="n">get_cells</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">all_cells</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -336,10 +312,8 @@ Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.ce
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span> 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="c1"># Create a dataframe from &#39;all_cells&#39; and re-assign the dataframe to a new variable</span>
+<span class="c1"># Create a dataframe from &#39;human_cells&#39; and re-assign the dataframe to a new variable</span>
 <span class="n">all_cells_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_cells</span><span class="p">)</span>
-
-<span class="c1"># &#39;.head()&#39;returns the first 5 rows of the dataframe instead of the entire dataframe</span>
 <span class="n">all_cells_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -481,7 +455,7 @@ Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.ce
 </table>
 </div></div></div>
 </div>
-<p>If we look back at our dataframe, our rows don’t have any useful information – they’re simply a list of indices starting from zero. We can reassign the row values by using the method <code class="docutils literal notranslate"><span class="pre">set_index</span></code>. You can assign any present column in the dataframe as the indices to be the indeces for the rows. Since each observation in the dataframe has a unique <code class="docutils literal notranslate"><span class="pre">id</span></code>, the <code class="docutils literal notranslate"><span class="pre">id</span></code> will be set as the index.</p>
+<p>If we look back at our dataframe, our rows don’t have any useful information – they’re simply a list of indices starting from zero. We can reassign the row values by using the method <code class="docutils literal notranslate"><span class="pre">set_index()</span></code>. Since each cell in the dataframe has a unique <code class="docutils literal notranslate"><span class="pre">id</span></code>, the <code class="docutils literal notranslate"><span class="pre">id</span></code> will be set as the index.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">all_cells_df</span> <span class="o">=</span> <span class="n">all_cells_df</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
@@ -638,14 +612,12 @@ Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.ce
 </table>
 </div></div></div>
 </div>
-<p>As you may have noticed already, out current dataframe only contains metadeta about our cells and no information on the morphology or electrophysiolgy of our cells. In order to get information about the morphology of these cells, we need to use the <code class="docutils literal notranslate"><span class="pre">get_morphology_features()</span></code> method on our instance of the cell types cache.</p>
+<p>As you may have noticed already, out current dataframe only contains metadeta about our cells and no information on the morphology or electrophysiolgy of our cells. In order to get information about the morphology of these cells, we need to use the <code class="docutils literal notranslate"><span class="pre">get_morphology_features()</span></code> method on our instance of the cell types cache. We will set the indices to be the <code class="docutils literal notranslate"><span class="pre">specimen_id</span></code> because these ids will align with those in <code class="docutils literal notranslate"><span class="pre">all_cells_df</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#morphology = ctc.get_morphology_features()</span>
-
-<span class="c1"># downloads the morphology features and sets up the dataframe all in one line</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># downloads the morphology features and sets up the dataframe all in one line</span>
 <span class="n">morphology_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ctc</span><span class="o">.</span><span class="n">get_morphology_features</span><span class="p">())</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;specimen_id&#39;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Length of dataframe:&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Length of dataframe:&#39;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">morphology_df</span><span class="p">))</span>
 <span class="n">morphology_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
@@ -855,8 +827,8 @@ Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.ce
 <p>If you need more information, look at the <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.join.html">join</a> and <a href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.merge.html">merge</a> documentation: you can use either of these to unite your dataframes, though join will be simpler!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta_and_morph_df</span> <span class="o">=</span> <span class="n">all_cells_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">morphology_df</span><span class="p">)</span>
-<span class="n">meta_and_morph_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta_morph_df</span> <span class="o">=</span> <span class="n">all_cells_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">morphology_df</span><span class="p">)</span>
+<span class="n">meta_morph_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -1028,9 +1000,187 @@ Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.ce
 <p>5 rows × 44 columns</p>
 </div></div></div>
 </div>
+<p><strong>Note</strong>: Notice that when we combine our metadata with our morphology data, we get a lot of NaN values in our morphology columns. This is becasue not all cells in our dataset will have morphology data. To only download cells that have morphology data from our database, make sure to specify <code class="docutils literal notranslate"><span class="pre">require_morphology=</span> <span class="pre">True,</span></code> when calling <code class="docutils literal notranslate"><span class="pre">get_cells()</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta_and_morph_df</span><span class="o">.</span><span class="n">columns</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cells_morph_only</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ctc</span><span class="o">.</span><span class="n">get_cells</span><span class="p">(</span><span class="n">require_morphology</span> <span class="o">=</span> <span class="kc">True</span><span class="p">))</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
+<span class="n">new_df</span> <span class="o">=</span> <span class="n">cells_morph_only</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">morphology_df</span><span class="p">)</span>
+<span class="n">new_df</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>reporter_status</th>
+      <th>cell_soma_location</th>
+      <th>species</th>
+      <th>name</th>
+      <th>structure_layer_name</th>
+      <th>structure_area_id</th>
+      <th>structure_area_abbrev</th>
+      <th>transgenic_line</th>
+      <th>dendrite_type</th>
+      <th>apical</th>
+      <th>...</th>
+      <th>overall_width</th>
+      <th>scale_factor_x</th>
+      <th>scale_factor_y</th>
+      <th>scale_factor_z</th>
+      <th>soma_surface</th>
+      <th>superseded</th>
+      <th>tags</th>
+      <th>total_length</th>
+      <th>total_surface</th>
+      <th>total_volume</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>313861608</th>
+      <td>positive</td>
+      <td>[9349.44051500564, 1314.78991021449, 3245.6530...</td>
+      <td>Mus musculus</td>
+      <td>Pvalb-IRES-Cre;Ai14-165874.04.02.01</td>
+      <td>5</td>
+      <td>385</td>
+      <td>VISp</td>
+      <td>Pvalb-IRES-Cre</td>
+      <td>aspiny</td>
+      <td>NA</td>
+      <td>...</td>
+      <td>358.994232</td>
+      <td>0.1144</td>
+      <td>0.1144</td>
+      <td>0.28</td>
+      <td>514.500853</td>
+      <td>False</td>
+      <td>3D Neuron Reconstruction morphology</td>
+      <td>3538.876780</td>
+      <td>6041.095769</td>
+      <td>945.093080</td>
+    </tr>
+    <tr>
+      <th>313862022</th>
+      <td>positive</td>
+      <td>[9489.24257509068, 1423.65239028148, 2785.4430...</td>
+      <td>Mus musculus</td>
+      <td>Scnn1a-Tg2-Cre;Ai14-167081.03.02.01</td>
+      <td>4</td>
+      <td>385</td>
+      <td>VISp</td>
+      <td>Scnn1a-Tg2-Cre</td>
+      <td>spiny</td>
+      <td>intact</td>
+      <td>...</td>
+      <td>287.122628</td>
+      <td>0.1144</td>
+      <td>0.1144</td>
+      <td>0.28</td>
+      <td>268.777679</td>
+      <td>False</td>
+      <td>3D Neuron Reconstruction morphology</td>
+      <td>3498.090031</td>
+      <td>3523.606841</td>
+      <td>306.290931</td>
+    </tr>
+    <tr>
+      <th>313862167</th>
+      <td>positive</td>
+      <td>[9279.53948496313, 1831.03502009105, 2151.2443...</td>
+      <td>Mus musculus</td>
+      <td>Sst-IRES-Cre;Ai14-167638.05.02.01</td>
+      <td>4</td>
+      <td>409</td>
+      <td>VISl</td>
+      <td>Sst-IRES-Cre</td>
+      <td>aspiny</td>
+      <td>NA</td>
+      <td>...</td>
+      <td>327.150383</td>
+      <td>0.1144</td>
+      <td>0.1144</td>
+      <td>0.28</td>
+      <td>361.118559</td>
+      <td>False</td>
+      <td>3D Neuron Reconstruction morphology</td>
+      <td>2644.878298</td>
+      <td>3883.698604</td>
+      <td>512.836253</td>
+    </tr>
+    <tr>
+      <th>313862167</th>
+      <td>positive</td>
+      <td>[9279.53948496313, 1831.03502009105, 2151.2443...</td>
+      <td>Mus musculus</td>
+      <td>Sst-IRES-Cre;Ai14-167638.05.02.01</td>
+      <td>4</td>
+      <td>409</td>
+      <td>VISl</td>
+      <td>Sst-IRES-Cre</td>
+      <td>aspiny</td>
+      <td>NA</td>
+      <td>...</td>
+      <td>327.150383</td>
+      <td>0.1144</td>
+      <td>0.1144</td>
+      <td>0.28</td>
+      <td>361.118559</td>
+      <td>True</td>
+      <td>3D Neuron Reconstruction morphology</td>
+      <td>2644.878347</td>
+      <td>3883.699514</td>
+      <td>512.835043</td>
+    </tr>
+    <tr>
+      <th>313862306</th>
+      <td>positive</td>
+      <td>[8976.63502144556, 1878.14058922573, 8881.4968...</td>
+      <td>Mus musculus</td>
+      <td>Sst-IRES-Cre;Ai14-167636.04.01.01</td>
+      <td>6a</td>
+      <td>385</td>
+      <td>VISp</td>
+      <td>Sst-IRES-Cre</td>
+      <td>aspiny</td>
+      <td>NA</td>
+      <td>...</td>
+      <td>242.781213</td>
+      <td>0.1144</td>
+      <td>0.1144</td>
+      <td>0.28</td>
+      <td>94.306278</td>
+      <td>False</td>
+      <td>3D Neuron Reconstruction morphology</td>
+      <td>2502.160541</td>
+      <td>1994.902243</td>
+      <td>141.878464</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 44 columns</p>
+</div></div></div>
+</div>
+<p>To ensure that the merge was succesful, we will look at the columns of our new dataframe and check to see if all the columns from both <code class="docutils literal notranslate"><span class="pre">all_cells_df</span></code> and <code class="docutils literal notranslate"><span class="pre">morphology_df</span></code>. We will also check if the length of the dataframe matches that of both <code class="docutils literal notranslate"><span class="pre">all_cells_df</span></code> and <code class="docutils literal notranslate"><span class="pre">morphology_df</span></code></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">meta_morph_df</span><span class="o">.</span><span class="n">columns</span>
 </pre></div>
 </div>
 </div>
@@ -1053,27 +1203,37 @@ Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.ce
 </div>
 </div>
 </div>
-<p>You can also acesss morphology of a single cell by exectuing the <code class="docutils literal notranslate"><span class="pre">get_recontruction()</span></code> method on your instance of the cells type cache. To do so, you must specify what cell you want to recontruct by inputing a <code class="docutils literal notranslate"><span class="pre">specimen_id</span></code>. This method returns a class instance with methods for accessing morphology compartments.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create lists of all our columns </span>
+<span class="n">all_columns</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">morphology_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">all_cells_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+<span class="n">complete_df_column_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">meta_morph_df</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Are all of the columns there?&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">all_columns</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span> <span class="o">==</span> <span class="n">complete_df_column_list</span><span class="o">.</span><span class="n">sort</span><span class="p">())</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">Is the length the same?&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">all_cells_df</span> <span class="o">+</span> <span class="n">morphology_df</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">meta_morph_df</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Are all of the columns there?
+True
+
+Is the length the same?
+True
+</pre></div>
+</div>
+</div>
+</div>
+<p>The Cell Types Database also contains 3D reconstructions of neuronal morphologies. You can these single cell reconstructions by exectuing the <code class="docutils literal notranslate"><span class="pre">get_recontruction()</span></code> method on your instance of the cells type cache. To do so, you must specify what cell you want to recontruct by inputing a <code class="docutils literal notranslate"><span class="pre">specimen_id</span></code>. This method returns a class instance with methods for accessing morphology compartments.</p>
+<p><strong>Note</strong>: Not all cells will have data for a 3D resonstruction. To only download cells that have cell reconstructions, make sure to specify <code class="docutils literal notranslate"><span class="pre">require_reconstruction</span> <span class="pre">=</span> <span class="pre">True,</span></code> when calling <code class="docutils literal notranslate"><span class="pre">get_cells()</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cell_id</span> <span class="o">=</span> <span class="mi">478107198</span>
 <span class="n">single_cell_morphology</span> <span class="o">=</span> <span class="n">ctc</span><span class="o">.</span><span class="n">get_reconstruction</span><span class="p">(</span><span class="n">specimen_id</span> <span class="o">=</span> <span class="n">cell_id</span><span class="p">)</span>
-
-<span class="c1">#help(single_cell_morphology)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">single_cell_morphology</span><span class="o">.</span><span class="n">soma</span>
+<span class="n">single_cell_morphology</span><span class="o">.</span><span class="n">soma</span>
 </pre></div>
 </div>
 </div>
@@ -1122,9 +1282,11 @@ Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.ce
 </div>
 </div>
 </div>
+<p>We can use this data to draw lines between each node and all its children to get a drawing of the cell. We’ll do it looking at it from the front and from the side.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import necessary toolbox</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Import necessary toolboxes</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">from</span> <span class="nn">allensdk.core.swc</span> <span class="kn">import</span> <span class="n">Marker</span>
 
 <span class="c1"># Set up our plot</span>
@@ -1150,14 +1312,14 @@ Look through <a href="https://allensdk.readthedocs.io/en/latest/allensdk.core.ce
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)</span>
 <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;z&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Front View&#39;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s1">&#39;Side View&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/Morphology_For_Single_Cells_23_0.png" src="../_images/Morphology_For_Single_Cells_23_0.png" />
-</div>
-</div>
+<img alt="../_images/Morphology_For_Single_Cells_26_0.png" src="../_images/Morphology_For_Single_Cells_26_0.png" />
 </div>
 </div>
 </div>

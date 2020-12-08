@@ -91,7 +91,7 @@
   <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../landing_page.html">
-   A Hands-On Guide to Neural Data Science¶
+   A Hands-On Guide to Neural Data Science
   </a>
  </li>
 </ul>
@@ -271,6 +271,7 @@
                 
   <div class="section" id="plotting-a-signle-sweep-of-data">
 <h1><span class="section-number">5.3. </span>Plotting a Signle Sweep of Data<a class="headerlink" href="#plotting-a-signle-sweep-of-data" title="Permalink to this headline">¶</a></h1>
+<p>In this section we will go over how to access electrophysiology data from our cells. Once downloaded, we will be able to plot our cells’ electrophysiology features to compare characteristics across specimen. We will also learn how to download electrophysiology traces of single cells and plot single sweeps of these cells.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1">#Import all necessay packages and initialize the cache as &#39;ctc&#39; (cell types cache)</span>
@@ -285,14 +286,20 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Packages successfully imported.&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Packages successfully imported.
 </pre></div>
 </div>
 </div>
 </div>
-<p>In this section we will go over how to access electrophysiology data from our cells. Once downloaded, we will be able to plot our cells’ electrophysiology features to compare characteristics across specimen. We will also learn how to download electrophysiology traces of single cells and plot single sweeps of these cells.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># redownload the metadata for our cells</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># redownload the metadata for all our cells</span>
 <span class="n">all_cells</span> <span class="o">=</span> <span class="n">ctc</span><span class="o">.</span><span class="n">get_cells</span><span class="p">()</span>
 <span class="n">all_cells_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">all_cells</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;id&#39;</span><span class="p">)</span>
 <span class="n">all_cells_df</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
@@ -412,8 +419,8 @@
 </table>
 </div></div></div>
 </div>
-<p>At this point, you might have realized that this dataframe doesn’t contain any data about the electrophysiology. In order to get information about the electrophysiological properties of these cells, we need to use the get_ephys_features() method on our instance of the cell types cache.</p>
-<p>Just as we did before, we will will assign the output of get_ephys_features() to a variable and then convert it into a pandas dataframe.</p>
+<p>At this point, you might have realized that this dataframe doesn’t contain any data about the electrophysiology of our cells either. In order to get information about the electrophysiological properties of these cells, we need to use the <code class="docutils literal notranslate"><span class="pre">get_ephys_features()</span></code> method on our instance of the cell types cache.</p>
+<p>Just as we did before, we will will assign the output of <code class="docutils literal notranslate"><span class="pre">get_ephys_features()</span></code> to a variable and then convert it into a pandas dataframe.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ephys_features</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">ctc</span><span class="o">.</span><span class="n">get_ephys_features</span><span class="p">())</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;specimen_id&#39;</span><span class="p">)</span>
@@ -814,14 +821,16 @@
 </div></div></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">get_ephys_data()</span></code> method can download electrophysiology traces for a single cell in the database. This method returns a class instance with helper methods for retrieving stimulus and response traces out of an NWB file. In order to use this method, you must specify the id of the cell specimen whose electrophysiology you would like to download.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_experiment_sweep_numbers()</span></code> method downloads all of the sweep numbers for experiments in the file. Each sweep contains metadata and electrophysiology data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">cell_id_2</span> <span class="o">=</span> <span class="mi">525011903</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># select cell id </span>
+<span class="n">cell_id_2</span> <span class="o">=</span> <span class="mi">525011903</span>
 <span class="n">specimen_ephys_data</span> <span class="o">=</span> <span class="n">ctc</span><span class="o">.</span><span class="n">get_ephys_data</span><span class="p">(</span><span class="n">specimen_id</span> <span class="o">=</span> <span class="n">cell_id_2</span><span class="p">)</span>
+
+<span class="c1"># retrieve sweep numbers for cell id </span>
 <span class="n">sweep_numbers</span> <span class="o">=</span> <span class="n">specimen_ephys_data</span><span class="o">.</span><span class="n">get_experiment_sweep_numbers</span><span class="p">()</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">sweep_numbers</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">])</span>
-<span class="c1">#specimen1_ephys.get_sweep_metadata(100)</span>
-<span class="c1">#specimen1_ephys.get_spike_times(100)</span>
 </pre></div>
 </div>
 </div>
@@ -831,14 +840,41 @@
 </div>
 </div>
 </div>
+<p>Now that we have sweep numbers to choose from, we can take a look at a sweep’s metadata by calling <code class="docutils literal notranslate"><span class="pre">get_sweep_metadata()</span></code>. This return a dictionary contianing information such as stimulus paramaters and recording quality.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sweep_number</span> <span class="o">=</span> <span class="mi">100</span>
-<span class="n">sweep_data</span> <span class="o">=</span> <span class="n">specimen_ephys_data</span><span class="o">.</span><span class="n">get_sweep</span><span class="p">(</span><span class="n">sweep_number</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># select a sweep number </span>
+<span class="n">sweep_number</span> <span class="o">=</span> <span class="mi">100</span>
+
+<span class="c1"># retrieve metadata for selected sweep</span>
+<span class="n">specimen_metadata</span> <span class="o">=</span> <span class="n">specimen_ephys_data</span><span class="o">.</span><span class="n">get_sweep_metadata</span><span class="p">(</span><span class="n">sweep_number</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">specimen_metadata</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;aibs_stimulus_amplitude_pa&#39;: 830.000013163357, &#39;aibs_stimulus_name&#39;: &#39;Short Square - Triple&#39;, &#39;initial_access_resistance&#39;: 12.931512, &#39;seal&#39;: 1.125671168}
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/VictorMagdaleno/opt/anaconda3/lib/python3.7/site-packages/allensdk/core/nwb_data_set.py:386: H5pyDeprecationWarning: dataset.value has been deprecated. Use dataset[()] instead.
+  sweep_metadata[field] = stim_details[field].value
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">get_sweep()</span></code> downloads the stimulus, response, index_range, and sampling rate for a particular sweep.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sweep_data</span> <span class="o">=</span> <span class="n">specimen_ephys_data</span><span class="o">.</span><span class="n">get_sweep</span><span class="p">(</span><span class="n">sweep_number</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">sweep_data</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;stimulus&#39;: array([0., 0., 0., ..., 0., 0., 0.], dtype=float32), &#39;response&#39;: array([-0.06978125, -0.06975   , -0.06975   , ..., -0.06981251,
+       -0.06984375, -0.06978125], dtype=float32), &#39;stimulus_unit&#39;: &#39;Amps&#39;, &#39;index_range&#39;: (37500, 183449), &#39;sampling_rate&#39;: 50000.0}
+</pre></div>
+</div>
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/VictorMagdaleno/opt/anaconda3/lib/python3.7/site-packages/allensdk/core/nwb_data_set.py:108: H5pyDeprecationWarning: dataset.value has been deprecated. Use dataset[()] instead.
   stimulus = stimulus_dataset.value
 /Users/VictorMagdaleno/opt/anaconda3/lib/python3.7/site-packages/allensdk/core/nwb_data_set.py:109: H5pyDeprecationWarning: dataset.value has been deprecated. Use dataset[()] instead.
@@ -855,7 +891,7 @@
 </div>
 </div>
 </div>
-<p>Now that you’ve pulled down some data, chosen a cell, and chosen a sweep number, let’s plot that data.</p>
+<p>Now that you’ve pulled down some data, chosen a cell, and chosen a sweep number, let’s plot that data. We can look closer at the action potential by plotting the raw recording.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Get the stimulus trace (in amps) and convert to pA</span>
@@ -878,7 +914,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<img alt="../_images/Plotting_A_Single_Sweep_of_Data_13_0.png" src="../_images/Plotting_A_Single_Sweep_of_Data_13_0.png" />
+<img alt="../_images/Plotting_A_Single_Sweep_of_Data_17_0.png" src="../_images/Plotting_A_Single_Sweep_of_Data_17_0.png" />
 </div>
 </div>
 <p>Without changing the limits on the x-axis, you won’t be able to see individual action potentials. To modify the x-axis using <code class="docutils literal notranslate"><span class="pre">plt.xlim([min,max])</span></code> to specify the limits (replace min and max with numbers that make sense for this x-axis)</p>

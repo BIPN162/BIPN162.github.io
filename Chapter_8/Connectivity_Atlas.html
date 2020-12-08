@@ -91,7 +91,7 @@
   <ul class="nav sidenav_l1">
  <li class="toctree-l1">
   <a class="reference internal" href="../landing_page.html">
-   A Hands-On Guide to Neural Data Science¶
+   A Hands-On Guide to Neural Data Science
   </a>
  </li>
 </ul>
@@ -304,7 +304,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;allensdk.core.mouse_connectivity_cache.MouseConnectivityCache object at 0x7fbf5fa66cd0&gt;
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;allensdk.core.mouse_connectivity_cache.MouseConnectivityCache object at 0x7ff03b163210&gt;
 </pre></div>
 </div>
 </div>
@@ -2339,7 +2339,34 @@ Name: name, dtype: object
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2020-12-01 21:03:45,283 allensdk.api.api.retrieve_file_over_http INFO     Downloading URL: http://api.brain-map.org/grid_data/download_file/127867804?image=projection_density&amp;resolution=25
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="o">&lt;</span><span class="n">ipython</span><span class="o">-</span><span class="nb">input</span><span class="o">-</span><span class="mi">18</span><span class="o">-</span><span class="mi">1</span><span class="n">f6d37729490</span><span class="o">&gt;</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="c1"># projection density: number of projecting pixels / voxel volume</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">pd</span><span class="p">,</span> <span class="n">pd_info</span> <span class="o">=</span> <span class="n">mcc</span><span class="o">.</span><span class="n">get_projection_density</span><span class="p">(</span><span class="n">experiment_id</span><span class="p">)</span>
+
+<span class="nn">~/opt/anaconda3/lib/python3.7/site-packages/allensdk/core/mouse_connectivity_cache.py</span> in <span class="ni">get_projection_density</span><span class="nt">(self, experiment_id, file_name)</span>
+<span class="g g-Whitespace">    </span><span class="mi">180</span>             <span class="n">file_name</span><span class="p">,</span> <span class="n">experiment_id</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resolution</span><span class="p">,</span> <span class="n">strategy</span><span class="o">=</span><span class="s1">&#39;lazy&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">181</span> 
+<span class="ne">--&gt; </span><span class="mi">182</span>         <span class="k">return</span> <span class="n">nrrd</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file_name</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">183</span> 
+<span class="g g-Whitespace">    </span><span class="mi">184</span>     <span class="k">def</span> <span class="nf">get_injection_density</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experiment_id</span><span class="p">,</span> <span class="n">file_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+<span class="nn">~/opt/anaconda3/lib/python3.7/site-packages/nrrd/reader.py</span> in <span class="ni">read</span><span class="nt">(filename, custom_field_map, index_order)</span>
+<span class="g g-Whitespace">    </span><span class="mi">506</span>     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">fh</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">507</span>         <span class="n">header</span> <span class="o">=</span> <span class="n">read_header</span><span class="p">(</span><span class="n">fh</span><span class="p">,</span> <span class="n">custom_field_map</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">508</span>         <span class="n">data</span> <span class="o">=</span> <span class="n">read_data</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">fh</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">index_order</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">509</span> 
+<span class="g g-Whitespace">    </span><span class="mi">510</span>     <span class="k">return</span> <span class="n">data</span><span class="p">,</span> <span class="n">header</span>
+
+<span class="nn">~/opt/anaconda3/lib/python3.7/site-packages/nrrd/reader.py</span> in <span class="ni">read_data</span><span class="nt">(header, fh, filename, index_order)</span>
+<span class="g g-Whitespace">    </span><span class="mi">448</span>         <span class="c1"># Byte skip is applied AFTER the decompression. Skip first x bytes of the decompressed data and parse it using</span>
+<span class="g g-Whitespace">    </span><span class="mi">449</span>         <span class="c1"># NumPy</span>
+<span class="ne">--&gt; </span><span class="mi">450</span>         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">decompressed_data</span><span class="p">[</span><span class="n">byte_skip</span><span class="p">:],</span> <span class="n">dtype</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">451</span> 
+<span class="g g-Whitespace">    </span><span class="mi">452</span>     <span class="c1"># Close the file, even if opened using &quot;with&quot; block, closing it manually does not hurt</span>
+
+<span class="ne">ValueError</span>: buffer size must be a multiple of element size
 </pre></div>
 </div>
 </div>
